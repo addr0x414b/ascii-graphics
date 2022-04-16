@@ -279,12 +279,82 @@ void fbTrig(Trig t, char c) {
 
 }
 
+void ftTrig(Trig t, char c) {
+	if (t.verts[2].x - t.verts[0].x == 0.0f) {
+		float m1 = (t.verts[2].y - t.verts[1].y) / (t.verts[2].x - t.verts[1].x);
+		float b1 = t.verts[2].y - (m1*t.verts[2].x);
+		for (int y = t.verts[2].y; y >= t.verts[0].y; y--) {
+			float x1 = t.verts[0].x;
+			float x2 = (y - b1) / m1;
+			if (x1 == x2) {
+				drawLine(x1, x2, y, y, 0, y, c);
+			}
+			else if (x1 < x2) {
+				drawLine(x1, x2, y, y, 0, y, c);
+			} else if (x2 < x1) {
+				drawLine(x2, x1, y, y, 0, y, c);
+			}
+
+		}
+	}
+	else if (t.verts[2].x - t.verts[1].x == 0.0f) {
+		float m2 = (t.verts[2].y - t.verts[0].y) / (t.verts[2].x - t.verts[0].x);
+		float b2 = t.verts[2].y - (m2*t.verts[2].x);
+		for (int y = t.verts[2].y; y >= t.verts[0].y; y--) {
+			float x1 = t.verts[1].x;
+			float x2 = (y - b2) / m2;
+			if (x1 == x2) {
+				drawLine(x1, x2, y, y, 0, y, c);
+			}
+			else if (x1 < x2) {
+				drawLine(x1, x2, y, y, 0, y, c);
+			} else if (x2 < x1) {
+				drawLine(x2, x1, y, y, 0, y, c);
+			}
+
+		}
+	} else {
+		float m1 = (t.verts[2].y - t.verts[1].y) / (t.verts[2].x - t.verts[1].x);
+		float b1 = t.verts[2].y - (m1*t.verts[2].x);
+		float m2 = (t.verts[2].y - t.verts[0].y) / (t.verts[2].x - t.verts[0].x);
+		float b2 = t.verts[2].y - (m2*t.verts[2].x);
+		for (int y = t.verts[2].y; y >= t.verts[0].y; y--) {
+			float x1 = (y - b1) / m1;
+			float x2 = (y - b2) / m2;
+			if (x1 == x2) {
+				drawLine(x1, x2, y, y, 0, y, c);
+			}
+			else if (x1 < x2) {
+				drawLine(x1, x2, y, y, 0, y, c);
+			} else if (x2 < x1) {
+				drawLine(x2, x1, y, y, 0, y, c);
+			}
+
+		}
+	}
+
+}
+
 void fillTrig(Trig t, char c) {
 	std::sort(t.verts, t.verts + 3, [](Vert const& a, Vert const& b) -> bool {
 			return a.y < b.y;
 			});
 	if(t.verts[1].y == t.verts[2].y) {
 		fbTrig(t, c);
+	} else if (t.verts[0].y == t.verts[1].y) {
+		ftTrig(t, c);
+	} else {
+		float m1 = (t.verts[0].y - t.verts[2].y) / (t.verts[0].x - t.verts[2].x);
+		float b1 = t.verts[0].y - (m1*t.verts[0].x);
+		float nX = (t.verts[1].y - b1) / m1;
+		Vert a(t.verts[0].x, t.verts[0].y, t.verts[0].z);
+		Vert b(t.verts[1].x, t.verts[1].y, t.verts[1].z);
+		Vert cc(nX, t.verts[1].y, t.verts[1].z);
+		Vert d(t.verts[2].x, t.verts[2].y, t.verts[2].z);
+		Trig fb(a, b, cc);
+		fbTrig(fb, c);
+		Trig ft(b, cc, d);
+		ftTrig(ft, c);
 	}
 }
 
@@ -293,9 +363,9 @@ void fillTrig(Trig t, char c) {
 int main() {
 
 	Screen screen(gScreenWidth, gScreenHeight, ' ');
-	Vert p2(50.0f, 1.0f, 0.0f);
-	Vert p3(25.0f, 30.0f, 0.0f);
-	Vert p1(75.0f, 30.0f, 0.0f);
+	Vert p2(50.0f, 5.0f, 0.0f);
+	Vert p3(25.0f, 20.0f, 0.0f);
+	Vert p1(75.0f, 35.0f, 0.0f);
 	Trig t1(p1, p2, p3);
 
 	float slope = 0.1f;
