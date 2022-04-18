@@ -2,6 +2,12 @@
 
 /* Ascii Graphics Mathematics library */
 
+// 4x4 matrix
+class Mat4 {
+	public:
+		float m[4][4] = { 0 };
+};
+
 // Vertices used in a triangle
 class Vert {
 	public:
@@ -26,12 +32,6 @@ class Trig {
 		Trig();
 };
 
-// 4x4 matrix
-class Mat4 {
-	public:
-		float m[4][4] = { 0 };
-};
-
 /* Returns a Mat4 with the perspective projection matrix values applied
  * @params aspect our screen aspect ratio
  * @params fov our field of view
@@ -39,3 +39,8 @@ class Mat4 {
  * @params zFar our far clipping plane
  * @returns Mat4 matrix with projection values */
 Mat4 perspective(float aspect, float fov, float zNear, float zFar);
+
+/* Multiply a vertex by a 4x4 matrix
+ * @params v our vertex
+ * @params m our 4x4 matrix */
+void mult4(Vert& v, Mat4 m);

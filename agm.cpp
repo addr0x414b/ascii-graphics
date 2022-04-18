@@ -41,3 +41,24 @@ Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 
 	return m;
 }
+
+/* Multiply a vertex by a 4x4 matrix
+ * @params v our vertex
+ * @params m our 4x4 matrix */
+void mult4(Vert& v, Mat4 m) {
+	// Temporary variables to multiply with
+	float tx = v.x;
+	float ty = v.y;
+	float tz = v.z;
+
+	v.x = tx * m.m[0][0] + ty * m.m[1][0] + tz * m.m[2][0] + m.m[3][0];
+	v.y = tx * m.m[0][1] + ty * m.m[1][1] + tz * m.m[2][1] + m.m[3][1];
+	v.z = tx * m.m[0][2] + ty * m.m[1][2] + tz * m.m[2][2] + m.m[3][2];
+	float w = tx * m.m[0][3] + ty * m.m[1][3] + tz * m.m[2][3] + m.m[3][3];
+
+	if (w != 0.0f) {
+		v.x /= w;
+		v.y /= w;
+		v.z /= w;
+	}
+}

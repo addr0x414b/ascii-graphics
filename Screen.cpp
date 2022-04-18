@@ -35,7 +35,7 @@ void Screen::clear() {
  * @param y our y position
  * @param c the character we draw to the buffer */
 void Screen::drawToBuffer(float x, float y, char c) {
-	if (x < width && y < height) {
+	if (x < width && y < height && x >= 0 && y >= 0) {
 		x = round(x);
 		y = round(y);
 		buffer[y][x] = c;
