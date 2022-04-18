@@ -49,7 +49,11 @@ void Screen::drawToBuffer(float x, float y, char c) {
  * @param y2 the y position of point 2
  * @param c the character we draw to the buffer */
 void Screen::drawLine(float x1, float y1, float x2, float y2, char c) {
-	if (x1 == x2) { // If the x's are the same, either vertical line or single point
+	x1 = round(x1);
+	y1 = round(y1);
+	x2 = round(x2);
+	y2 = round(y2);
+	if (x1 == x2) { // If the x's are the same, either vertical line or point
 		if (y1 == y2) {
 			drawToBuffer(x1, y1, c);
 		} else {

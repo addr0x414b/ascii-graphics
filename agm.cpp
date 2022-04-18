@@ -42,6 +42,21 @@ Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 	return m;
 }
 
+/* Returns a Mat4 with the rotation matrix along the Z axis
+ * @params degrees the number of degrees to rotate */
+Mat4 rotZ(float degrees) {
+	Mat4 m;
+
+	m.m[0][0] = cosf(degrees);
+	m.m[0][1] = sinf(degrees);
+	m.m[1][0] = -sinf(degrees);
+	m.m[1][1] = cosf(degrees);
+	m.m[2][2] = 1.f;
+	m.m[3][3] = 1.f;
+
+	return m;
+}
+
 /* Multiply a vertex by a 4x4 matrix
  * @params v our vertex
  * @params m our 4x4 matrix */

@@ -40,6 +40,10 @@ class Trig {
  * @returns Mat4 matrix with projection values */
 Mat4 perspective(float aspect, float fov, float zNear, float zFar);
 
+/* Returns a Mat4 with the rotation matrix along the Z axis
+ * @params degrees the number of degrees to rotate */
+Mat4 rotZ(float degrees);
+
 /* Multiply a vertex by a 4x4 matrix
  * @params v our vertex
  * @params m our 4x4 matrix */
