@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 /* Ascii Graphics Mathematics library */
 
 // 4x4 matrix
@@ -32,6 +34,32 @@ class Trig {
 		Trig();
 };
 
+// Mesh consists of triangles
+class Mesh {
+	public:
+		std::vector<Trig> trigs;
+
+		/* Rotate the mesh along the Z axis
+		 * @params degrees how much we rotate by in degrees */
+		void rotZ(float degrees);
+
+		/* Project the points of the mesh onto a 2d plane
+		 * @params aspect our screen aspect ratio
+		 * @params fov our field of view
+		 * @params zNear our near clipping plane
+		 * @params zFar our far clipping plane */
+		void project(float aspect, float fov, float zNear, float zFar);
+
+
+		/* Translate the mesh in any direction
+		 * @param x amount in x axis
+		 * @param y amount in y axis
+		 * @param z amount in z axis */
+		void translate(float x, float y, float z);
+
+		void scale(float x, float y, float z);
+};
+
 /* Returns a Mat4 with the perspective projection matrix values applied
  * @params aspect our screen aspect ratio
  * @params fov our field of view
@@ -47,4 +75,4 @@ Mat4 rotZ(float degrees);
 /* Multiply a vertex by a 4x4 matrix
  * @params v our vertex
  * @params m our 4x4 matrix */
-void mult4(Vert& v, Mat4 m);
+Vert mult4(Vert v, Mat4 m);

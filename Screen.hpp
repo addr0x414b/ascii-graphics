@@ -49,6 +49,11 @@ class Screen {
 		 * @param c the character we draw to the buffer */
 		void drawTrig(Trig t, char c);
 
+		/* Draw all of the triangles in a mesh to the buffer
+		 * @param m our mesh
+		 * @param c our draw character */
+		void drawMesh(Mesh m, char c);
+
 	private:
 		/* Draw to the buffer at a specific point. Does bounds checking
 		 * @param x our x position

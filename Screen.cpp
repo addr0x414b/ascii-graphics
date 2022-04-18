@@ -21,7 +21,7 @@ void Screen::print() {
 		}
 		std::cout << "\n";
 	}
-	usleep(10000);
+	usleep(8500);
 }
 
 // Clear the contents of the screen buffer
@@ -74,6 +74,13 @@ void Screen::drawLine(float x1, float y1, float x2, float y2, char c) {
 			int y = round((slope * x) + intercept);
 			drawToBuffer(x, y, c);
 		}
+		if (y1 > y2) {
+			std::swap(y1, y2);
+		}
+		for (int y = y1; y <= y2; y++) {
+			int x = round((y-intercept) / slope);
+			drawToBuffer(x, y, c);
+		}
 	}
 }
 /* Draw a line to the buffer using verts
@@ -91,4 +98,13 @@ void Screen::drawTrig(Trig t, char c) {
 	drawLine(t.verts[0], t.verts[1], c);
 	drawLine(t.verts[1], t.verts[2], c);
 	drawLine(t.verts[2], t.verts[0], c);
+}
+
+/* Draw all of the triangles in a mesh to the buffer
+ * @param m our mesh
+ * @param c our draw character */
+void Screen::drawMesh(Mesh m, char c) {
+	for (auto trig : m.trigs) {
+		drawTrig(trig, c);
+	}
 }
