@@ -43,6 +43,10 @@ class Mesh {
 		 * @params degrees how much we rotate by in degrees */
 		void rotZ(float degrees);
 
+		/* Rotate the mesh along the X axis
+		 * @params degrees how much we rotate by in degrees */
+		void rotX(float degrees);
+
 		/* Project the points of the mesh onto a 2d plane
 		 * @params aspect our screen aspect ratio
 		 * @params fov our field of view
@@ -71,6 +75,10 @@ Mat4 perspective(float aspect, float fov, float zNear, float zFar);
 /* Returns a Mat4 with the rotation matrix along the Z axis
  * @params degrees the number of degrees to rotate */
 Mat4 rotZ(float degrees);
+
+/* Returns a Mat4 with the rotation matrix along the X axis
+ * @params degrees the number of degrees to rotate */
+Mat4 rotX(float degrees);
 
 /* Multiply a vertex by a 4x4 matrix
  * @params v our vertex
