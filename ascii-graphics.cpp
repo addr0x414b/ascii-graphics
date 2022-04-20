@@ -2,9 +2,10 @@
 #include "agm.hpp"
 #include "Camera.hpp"
 #include <iostream>
+#include <algorithm>
 
 // Global variables
-int gScreenWidth = 100;
+int gScreenWidth = 150;
 int gScreenHeight = 50;
 float gAspect = (float)gScreenWidth / gScreenHeight;
 
@@ -13,7 +14,15 @@ int main() {
 	Camera camera(0.0f, 0.0f, 20.0f, gAspect);
 	Screen screen(gScreenWidth, gScreenHeight, camera);
 
-	/* Front Face */
+	/*
+	Vert p1(-1.0f, -1.0f, 0.0f);
+	Vert p2(1.0f, -1.0f, 0.0f);
+	Vert p3(0.6f, 1.0f, 0.0f);
+	Trig t1(p1, p2, p3, 0.0f, 0.0f, 1.0f);
+
+	Mesh t;*/
+
+	// Front Face
 	Vert p1(-1.0f, 1.0f, 1.0f);
 	Vert p2(-1.0f, -1.0f, 1.0f);
 	Vert p3(1.0f, -1.0f, 1.0f);
@@ -22,8 +31,7 @@ int main() {
 	Vert p5(1.0f, 1.0f, 1.0f);
 	Vert p6(-1.0f, 1.0f, 1.0f);
 	Trig t2(p4, p5, p6, 0.0f, 0.0f, 1.0f);
-
-	/* Top Face */
+	// Top Face
 	Vert p7(-1.0f, 1.0f, 1.0f);
 	Vert p8(1.0f, 1.0f, 1.0f);
 	Vert p9(-1.0f, 1.0f, -1.0f);
@@ -32,8 +40,7 @@ int main() {
 	Vert p11(1.0f, 1.0f, -1.0f);
 	Vert p12(-1.0f, 1.0f, -1.0f);
 	Trig t4(p10, p11, p12, 0.0f, 1.0f, 0.0f);
-
-	/* Right Face */
+	// Right Face
 	Vert p13(1.0f, 1.0f, 1.0f);
 	Vert p14(1.0f, -1.0f, 1.0f);
 	Vert p15(1.0f, -1.0f, -1.0f);
@@ -42,8 +49,7 @@ int main() {
 	Vert p17(1.0f, 1.0f, -1.0f);
 	Vert p18(1.0f, -1.0f, -1.0f);
 	Trig t6(p16, p17, p18, 1.0f, 0.0f, 0.0f);
-
-	/* Left Face */
+	// Left Face
 	Vert p19(-1.0f, 1.0f, 1.0f);
 	Vert p20(-1.0f, -1.0f, 1.0f);
 	Vert p21(-1.0f, -1.0f, -1.0f);
@@ -52,8 +58,7 @@ int main() {
 	Vert p23(-1.0f, 1.0f, -1.0f);
 	Vert p24(-1.0f, -1.0f, -1.0f);
 	Trig t8(p22, p23, p24, -1.0f, 0.0f, 0.0f);
-
-	/* Back Face */
+	// Back Face
 	Vert p25(-1.0f, 1.0f, -1.0f);
 	Vert p26(-1.0f, -1.0f, -1.0f);
 	Vert p27(1.0f, 1.0f, -1.0f);
@@ -62,8 +67,7 @@ int main() {
 	Vert p29(1.0f, -1.0f, -1.0f);
 	Vert p30(-1.0f, -1.0f, -1.0f);
 	Trig t10(p28, p29, p30, 0.0f, 0.0f, -1.0f);
-
-	/* Bottom Face */
+	// Bottom Face
 	Vert p31(-1.0f, -1.0f, 1.0f);
 	Vert p32(-1.0f, -1.0f, -1.0f);
 	Vert p33(1.0f, -1.0f, 1.0f);
@@ -72,23 +76,27 @@ int main() {
 	Vert p35(1.0f, -1.0f, -1.0f);
 	Vert p36(-1.0f, -1.0f, -1.0f);
 	Trig t12(p34, p35, p36, 0.0f, -1.0f, 0.0f);
-
-	Mesh square;
-
-	Mat4 projection = perspective(gAspect, 45.f, 0.1f, 1000.f);
-
+	Mesh cube;
 	float deg = 0.1f;
 	while (1) {
-		square.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
-		square.rotZ(deg);
-		square.rotX(deg);
+		cube.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
+		cube.rotZ(deg);
+		cube.rotX(deg);
 		deg += 0.01f;
-		square.translate(3.0f, 1.75f, -20.f);
+		cube.translate(0.0f, 0.0f, -20.f);
+		//cube.translate(3.0f, -1.75f, -20.f);
+		screen.drawMesh(cube, '*');
 
-		//square.project(gAspect, 45.f, 0.1f, 1000.f);
-		//square.scale(0.2f * (float)gScreenWidth, 0.2f * (float)gScreenHeight, 1.0f);
 
-		screen.drawMesh(square, '*');
+		/*
+		t.trigs = {t1};
+
+		t.translate(3.0f, -1.75f, -20.f);
+
+		screen.drawMeshWire(t, '*');
+		screen.fillMesh(t, '#'); */
+
+
 		screen.print();
 		screen.clear();
 	}

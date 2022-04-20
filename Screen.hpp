@@ -62,6 +62,21 @@ class Screen {
 		 * @param c our draw character */
 		void drawMesh(Mesh m, char c);
 
+		/* Draw all of the triangles not considering normals
+		 * @param m the mesh
+		 * @param c the draw character */
+		void drawMeshWire(Mesh m, char c);
+
+		/* Fill in a mesh via a character
+		 * @param m the mesh
+		 * @param c the draw character */
+		void fillMesh(Mesh m, char c);
+
+		/* Fill a flat bottom triangle
+		 * @param t the triangle
+		 * @param c the draw character */
+		void fillFb(Trig t, char c);
+
 	private:
 		/* Draw to the buffer at a specific point. Does bounds checking
 		 * @param x our x position

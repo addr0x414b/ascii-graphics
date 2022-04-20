@@ -168,8 +168,7 @@ void Mesh::scale(float x, float y, float z) {
 		//trig.fNormal.y *= y;
 		//trig.fNormal.z *= z;
 	}
-}
-*/
+}*/
 
 /* Multiply a vertex by a 4x4 matrix
  * @param v our vertex

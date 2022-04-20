@@ -1,6 +1,7 @@
 #include "Screen.hpp"
 #include <unistd.h>
 #include <math.h>
+#include <algorithm>
 
 /* Default constructor
  * @param w the screen width
@@ -108,14 +109,98 @@ void Screen::drawTrig(Trig t, char c) {
 void Screen::drawMesh(Mesh m, char c) {
 	for (auto &trig : m.trigs) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
+
 			project(trig, camera.projMat);
-			trig.verts[0].x *= 0.4f * (float)width;
-			trig.verts[0].y *= 0.4f * (float)height;
-			trig.verts[1].x *= 0.4f * (float)width;
-			trig.verts[1].y *= 0.4f * (float)height;
-			trig.verts[2].x *= 0.4f * (float)width;
-			trig.verts[2].y *= 0.4f * (float)height;
+
+			/*
+			trig.verts[0].x *= 0.6f * (float)width;
+			trig.verts[0].y *= -0.6f * (float)height/2;
+			trig.verts[1].x *= 0.6f * (float)width;
+			trig.verts[1].y *= -0.6f * (float)height/2;
+			trig.verts[2].x *= 0.6f * (float)width;
+			trig.verts[2].y *= -0.6f * (float)height/2;
+			*/
+
+			//trig.verts[0].x *= (float)width/2;
+			//trig.verts[0].y *= (float)height/2/2;
+			//trig.verts[1].x *= (float)width/2;
+			//trig.verts[1].y *= (float)height/2/2;
+			//trig.verts[2].x *= (float)width/2;
+			//trig.verts[2].y *= (float)height/2/2;
+
+			trig.verts[0].x *= 100.f;
+			trig.verts[0].y *= -100.f/6;
+			trig.verts[1].x *= 100.f;
+			trig.verts[1].y *= -100.f/6;
+			trig.verts[2].x *= 100.f;
+			trig.verts[2].y *= -100.f/6;
+
+			trig.verts[0].x += (float)width/2;
+			trig.verts[0].y += (float)height/2;
+			trig.verts[1].x += (float)width/2;
+			trig.verts[1].y += (float)height/2;
+			trig.verts[2].x += (float)width/2;
+			trig.verts[2].y += (float)height/2;
+
 			drawTrig(trig, c);
 		}
+	}
+}
+
+/* Draw all of the triangles not considering normals
+ * @param m the mesh
+ * @param c the draw character */
+void Screen::drawMeshWire(Mesh m, char c) {
+	for (auto &trig : m.trigs) {
+		project(trig, camera.projMat);
+		trig.verts[0].x *= 0.4f * (float)width;
+		trig.verts[0].y *= -0.4f * (float)height;
+		trig.verts[1].x *= 0.4f * (float)width;
+		trig.verts[1].y *= -0.4f * (float)height;
+		trig.verts[2].x *= 0.4f * (float)width;
+		trig.verts[2].y *= -0.4f * (float)height;
+		drawTrig(trig, c);
+	}
+}
+
+/* Fill in a mesh via a character
+ * @param m the mesh
+ * @param c the draw character */
+void Screen::fillMesh(Mesh m, char c) {
+	for (auto &trig : m.trigs) {
+		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
+			project(trig, camera.projMat);
+			trig.verts[0].x *= 0.4f * (float)width;
+			trig.verts[0].y *= -0.4f * (float)height;
+			trig.verts[1].x *= 0.4f * (float)width;
+			trig.verts[1].y *= -0.4f * (float)height;
+			trig.verts[2].x *= 0.4f * (float)width;
+			trig.verts[2].y *= -0.4f * (float)height;
+			std::sort(trig.verts, trig.verts + 3,
+					[](Vert const& a, Vert const& b) -> bool {
+					return a.y < b.y;
+					});
+
+			if (trig.verts[1].y == trig.verts[2].y) {
+				fillFb(trig, c);
+			}
+		}
+	}
+}
+
+/* Fill a flat bottom triangle
+ * @param t the triangle
+ * @param c the draw character */
+void Screen::fillFb(Trig t, char c) {
+	float m1 = (t.verts[0].y - t.verts[1].y) / (t.verts[0].x - t.verts[1].x);
+	float b1 = t.verts[0].y - (m1 * t.verts[0].x);
+
+	float m2 = (t.verts[0].y - t.verts[2].y) / (t.verts[0].x - t.verts[2].x);
+	float b2 = t.verts[0].y - (m2 * t.verts[0].x);
+
+	for (int y = t.verts[0].y; y <= t.verts[2].y; y++) {
+		float x1 = (y - b1) / m1;
+		float x2 = (y - b2) / m2;
+		drawLine(x1, y, x2, y, c);
 	}
 }
