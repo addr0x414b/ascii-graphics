@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "agm.hpp"
+#include "Camera.hpp"
 
 // Screen simulation that allows printing ascii characters to the terminal
 class Screen {
@@ -19,10 +20,17 @@ class Screen {
 		// that the screen is empty. Can change for debug/style purposes
 		char fillChar;
 
+		// The camera that the screen will use
+		Camera camera;
+
+		// Our projection matrix for the screen
+		Mat4 projMat;
+
 		/* Default constructor
 		 * @param w the screen width
-		 * @param h the screen height */
-		Screen(int w, int h);
+		 * @param h the screen height
+		 * @param c our screens camera */
+		Screen(int w, int h, Camera c);
 
 		// Print the contents of the screen buffer
 		void print();
@@ -30,7 +38,7 @@ class Screen {
 		// Clear the contents of the screen buffer
 		void clear();
 
-		/* Draw a line to the buffer
+		/* Draw a line to the buffer using individual coordinates
 		 * @param x1 the x position of point 1
 		 * @param y1 the y position of point 1
 		 * @param x2 the x position of point 2

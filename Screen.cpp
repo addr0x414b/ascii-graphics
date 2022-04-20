@@ -4,8 +4,10 @@
 
 /* Default constructor
  * @param w the screen width
- * @param h the screen height */
-Screen::Screen(int w, int h) {
+ * @param h the screen height
+ * @param c our screens camera */
+Screen::Screen(int w, int h, Camera c) {
+	camera = c;
 	width = w;
 	height = h;
 	fillChar = ' ';
@@ -42,7 +44,7 @@ void Screen::drawToBuffer(float x, float y, char c) {
 	}
 }
 
-/* Draw a line to the buffer
+/* Draw a line to the buffer using individual coordinates
  * @param x1 the x position of point 1
  * @param y1 the y position of point 1
  * @param x2 the x position of point 2
@@ -104,7 +106,16 @@ void Screen::drawTrig(Trig t, char c) {
  * @param m our mesh
  * @param c our draw character */
 void Screen::drawMesh(Mesh m, char c) {
-	for (auto trig : m.trigs) {
-		drawTrig(trig, c);
+	for (auto &trig : m.trigs) {
+		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
+			project(trig, camera.projMat);
+			trig.verts[0].x *= 0.5f * (float)width;
+			trig.verts[0].y *= 0.5f * (float)height;
+			trig.verts[1].x *= 0.5f * (float)width;
+			trig.verts[1].y *= 0.5f * (float)height;
+			trig.verts[2].x *= 0.5f * (float)width;
+			trig.verts[2].y *= 0.5f * (float)height;
+			drawTrig(trig, c);
+		}
 	}
 }

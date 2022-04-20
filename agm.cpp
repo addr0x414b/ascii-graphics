@@ -18,19 +18,23 @@ Vert::Vert() {
 }
 
 /* Default constructor
- * @param p1,p2,p3 vertices of the triangle */
-Trig::Trig(Vert p1, Vert p2, Vert p3) {
+ * @params p1,p2,p3 vertices of the triangle
+ * @params x,y,z the face normal of the triangle */
+Trig::Trig(Vert p1, Vert p2, Vert p3, float x, float y, float z) {
 	verts[0] = p1;
 	verts[1] = p2;
 	verts[2] = p3;
+
+	Vert n(x, y, z);
+	fNormal = n;
 }
 
-/* Returns a Mat4 with the perspective projection matrix values applied
- * @params aspect our screen aspect ratio
- * @params fov our field of view
- * @params zNear our near clipping plane
- * @params zFar our far clipping plane
- * @returns Mat4 matrix with projection values */
+/* Creates a Mat4 with the perspective projection matrix values applied
+ * @param aspect our screen aspect ratio
+ * @param fov our field of view
+ * @param zNear our near clipping plane
+ * @param zFar our far clipping plane
+ * @return Mat4 matrix with projection values */
 Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 	Mat4 m;
 
@@ -43,8 +47,9 @@ Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 	return m;
 }
 
-/* Returns a Mat4 with the rotation matrix along the X axis
- * @params degrees the number of degrees to rotate */
+/* Creates a Mat4 with the rotation matrix along the X axis
+ * @param degrees the number of degrees to rotate
+ * @return Mat4 rotation matrix */
 Mat4 rotX(float degrees) {
 	Mat4 m;
 
@@ -58,8 +63,9 @@ Mat4 rotX(float degrees) {
 	return m;
 }
 
-/* Returns a Mat4 with the rotation matrix along the Z axis
- * @params degrees the number of degrees to rotate */
+/* Creates a Mat4 with the rotation matrix along the Z axis
+ * @param degrees the number of degrees to rotate
+ * @return Mat4 rotation matrix */
 Mat4 rotZ(float degrees) {
 	Mat4 m;
 
@@ -74,35 +80,29 @@ Mat4 rotZ(float degrees) {
 }
 
 /* Rotate the mesh along the X axis
- * @params degrees how much we rotate by in degrees */
+ * @param degrees how much we rotate by in degrees */
 void Mesh::rotX(float degrees) {
 	Mat4 m = ::rotX(degrees);
 
 	for (auto &trig : trigs) {
-		Vert a = mult4(trig.verts[0], m);
-		Vert b = mult4(trig.verts[1], m);
-		Vert c = mult4(trig.verts[2], m);
-
-		trig.verts[0] = a;
-		trig.verts[1] = b;
-		trig.verts[2] = c;
+		trig.verts[0] = mult4(trig.verts[0], m);
+		trig.verts[1] = mult4(trig.verts[1], m);
+		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.fNormal = mult4(trig.fNormal, m);
 	}
 
 }
 
 /* Rotate the mesh along the Z axis
- * @params degrees how much we rotate by in degrees */
+ * @param degrees how much we rotate by in degrees */
 void Mesh::rotZ(float degrees) {
 	Mat4 m = ::rotZ(degrees);
 
 	for (auto &trig : trigs) {
-		Vert a = mult4(trig.verts[0], m);
-		Vert b = mult4(trig.verts[1], m);
-		Vert c = mult4(trig.verts[2], m);
-
-		trig.verts[0] = a;
-		trig.verts[1] = b;
-		trig.verts[2] = c;
+		trig.verts[0] = mult4(trig.verts[0], m);
+		trig.verts[1] = mult4(trig.verts[1], m);
+		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.fNormal = mult4(trig.fNormal, m);
 	}
 }
 
@@ -110,7 +110,7 @@ void Mesh::rotZ(float degrees) {
  * @params aspect our screen aspect ratio
  * @params fov our field of view
  * @params zNear our near clipping plane
- * @params zFar our far clipping plane */
+ * @params zFar our far clipping plane
 void Mesh::project(float aspect, float fov, float zNear, float zFar) {
 	Mat4 m = perspective(aspect, fov, zNear, zFar);
 
@@ -124,7 +124,7 @@ void Mesh::project(float aspect, float fov, float zNear, float zFar) {
 		trig.verts[2] = c;
 	}
 }
-
+*/
 
 /* Translate the mesh in any direction
  * @param x amount in x axis
@@ -146,10 +146,10 @@ void Mesh::translate(float x, float y, float z) {
 	}
 }
 
-/* Translate the mesh in any direction
+/* Scale the mesh
  * @param x amount in x axis
  * @param y amount in y axis
- * @param z amount in z axis */
+ * @param z amount in z axis
 void Mesh::scale(float x, float y, float z) {
 	for (auto &trig : trigs) {
 		trig.verts[0].x *= x;
@@ -163,12 +163,18 @@ void Mesh::scale(float x, float y, float z) {
 		trig.verts[2].x *= x;
 		trig.verts[2].y *= y;
 		trig.verts[2].z *= z;
+
+		//trig.fNormal.x *= x;
+		//trig.fNormal.y *= y;
+		//trig.fNormal.z *= z;
 	}
 }
+*/
 
 /* Multiply a vertex by a 4x4 matrix
- * @params v our vertex
- * @params m our 4x4 matrix */
+ * @param v our vertex
+ * @param m our 4x4 matrix
+ * @return product of multiplcation */
 Vert mult4(Vert v, Mat4 m) {
 
 	Vert a;
@@ -190,4 +196,28 @@ Vert mult4(Vert v, Mat4 m) {
 	}
 
 	return a;
+}
+
+/* Calculate the dot product between two vertices
+ * @params a,b vertices
+ * @return float result */
+float dot(Vert a, Vert b) {
+	return ((a.x*b.x) + (a.y*b.y) + (a.z*b.z));
+}
+
+/* Calculate the direction vector a->b
+ * @params a,b vertices
+ * @return Vert direction vector result */
+Vert direc(Vert a, Vert b) {
+	Vert r(a.x-b.x, a.y-b.y, a.z-b.y);
+	return r;
+}
+
+/* Project a triangle with a perspective matrix
+ * @param t the triangle
+ * @param m the perspective matrix */
+void project(Trig& t, Mat4 m) {
+		t.verts[0] = mult4(t.verts[0], m);
+		t.verts[1] = mult4(t.verts[1], m);
+		t.verts[2] = mult4(t.verts[2], m);
 }
