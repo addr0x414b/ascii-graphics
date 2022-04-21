@@ -77,6 +77,11 @@ class Screen {
 		 * @param c the draw character */
 		void fillFb(Trig t, char c);
 
+		/* Fill a flat top triangle
+		 * @param t the triangle
+		 * @param c the draw character */
+		void fillFt(Trig t, char c);
+
 	private:
 		/* Draw to the buffer at a specific point. Does bounds checking
 		 * @param x our x position
