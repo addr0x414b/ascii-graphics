@@ -154,12 +154,20 @@ void Screen::drawMesh(Mesh m, char c) {
 void Screen::drawMeshWire(Mesh m, char c) {
 	for (auto &trig : m.trigs) {
 		project(trig, camera.projMat);
-		trig.verts[0].x *= 0.4f * (float)width;
-		trig.verts[0].y *= -0.4f * (float)height;
-		trig.verts[1].x *= 0.4f * (float)width;
-		trig.verts[1].y *= -0.4f * (float)height;
-		trig.verts[2].x *= 0.4f * (float)width;
-		trig.verts[2].y *= -0.4f * (float)height;
+
+		trig.verts[0].x *= 100.f;
+		trig.verts[0].y *= -100.f/6;
+		trig.verts[1].x *= 100.f;
+		trig.verts[1].y *= -100.f/6;
+		trig.verts[2].x *= 100.f;
+		trig.verts[2].y *= -100.f/6;
+
+		trig.verts[0].x += (float)width/2;
+		trig.verts[0].y += (float)height/2;
+		trig.verts[1].x += (float)width/2;
+		trig.verts[1].y += (float)height/2;
+		trig.verts[2].x += (float)width/2;
+		trig.verts[2].y += (float)height/2;
 		drawTrig(trig, c);
 	}
 }
@@ -224,6 +232,7 @@ void Screen::fillFb(Trig t, char c) {
 
 	float x1;
 	float x2;
+
 	for (int y = t.verts[0].y+1; y <= t.verts[2].y; y++) {
 		if (std::isfinite(m1)) {
 			x1 = (y - b1) / m1;
@@ -238,7 +247,7 @@ void Screen::fillFb(Trig t, char c) {
 		}
 		drawLine(x1, y, x2, y, c);
 	}
-	drawTrig(t, c);
+	//drawTrig(t, c);
 }
 
 /* Fill a flat top triangle
@@ -255,7 +264,7 @@ void Screen::fillFt(Trig t, char c) {
 
 	float x1;
 	float x2;
-	for (int y = t.verts[2].y-1; y >= t.verts[0].y; y--) {
+	for (int y = t.verts[2].y; y >= t.verts[0].y; y--) {
 		if (std::isfinite(m1)) {
 			x1 = (y - b1) / m1;
 		} else {
@@ -269,5 +278,5 @@ void Screen::fillFt(Trig t, char c) {
 		}
 		drawLine(x1, y, x2, y, c);
 	}
-	drawTrig(t, c);
+	//drawTrig(t, c);
 }

@@ -14,14 +14,14 @@ int main() {
 	Camera camera(0.0f, 0.0f, 20.0f, gAspect);
 	Screen screen(gScreenWidth, gScreenHeight, camera);
 
+	/*
 	Vert p1(1.35f, 1.0f, 0.0f);
 	Vert p2(1.25f, -2.0f, 0.0f);
 	Vert p3(-2.0f, 2.0f, 0.0f);
 	Trig t1(p1, p2, p3, 0.0f, 0.0f, 1.0f);
 
-	Mesh t;
+	Mesh t; */
 
-	/*
 	// Front Face
 	Vert p1(-1.0f, 1.0f, 1.0f);
 	Vert p2(-1.0f, -1.0f, 1.0f);
@@ -79,11 +79,10 @@ int main() {
 	Mesh cube;
 	Mesh cube2;
 	Mesh cube3;
-	float deg = 0.1f; */
+	float deg = 0.1f;
 
 
 	while (1) {
-		/*
 		cube.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube2.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube3.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
@@ -97,16 +96,20 @@ int main() {
 		cube.translate(-1.0f, 0.0f, -20.f);
 		cube2.translate(3.0f, 0.0f, -40.f);
 		cube3.translate(2.0f, 5.0f, -60.f);
+		screen.fillMesh(cube, '#');
 		screen.drawMesh(cube, '*');
+		screen.fillMesh(cube2, '#');
 		screen.drawMesh(cube2, '*');
-		screen.drawMesh(cube3, '*'); */
+		screen.fillMesh(cube3, '#');
+		screen.drawMesh(cube3, '*');
 
+		/*
 		t.trigs = {t1};
 
 		t.translate(0.0f, 0.0f, -20.f);
 
 		screen.drawMesh(t, '*');
-		screen.fillMesh(t, '#');
+		screen.fillMesh(t, '#'); */
 
 
 		screen.print();
