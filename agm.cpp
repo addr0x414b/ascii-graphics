@@ -201,6 +201,14 @@ Vert direc(Vert a, Vert b) {
 	return r;
 }
 
+/* Calculate the cross product of two vectors
+ * @params a,b vertices
+ * @return Vert cross product result */
+Vert cross(Vert a, Vert b) {
+	Vert c((a.y*b.z)-(a.z*b.y), (a.z*b.x)-(a.x*b.z), (a.x*b.y)-(a.y*b.x));
+	return c;
+}
+
 /* Project a triangle with a perspective matrix
  * @param t the triangle
  * @param m the perspective matrix */
@@ -208,4 +216,14 @@ void project(Trig& t, Mat4 m) {
 		t.verts[0] = mult4(t.verts[0], m);
 		t.verts[1] = mult4(t.verts[1], m);
 		t.verts[2] = mult4(t.verts[2], m);
+}
+
+/* Calculate the Z value from x,y using cross and vert of equation of plane
+ * @params x,y our input x and y values
+ * @param c cross product vertex from equation of plane
+ * @param v point from our original triangle from equation of plane */
+float calcZ(float x, float y, Vert c, Vert v) {
+	float k = dot(c, v);
+	float z = ((c.x*x + c.y*y - k) / (-c.z));
+	return z;
 }

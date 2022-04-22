@@ -94,6 +94,17 @@ float dot(Vert a, Vert b);
  * @return Vert direction vector result */
 Vert direc(Vert a, Vert b);
 
+/* Calculate the cross product of two vectors
+ * @params a,b vertices
+ * @return Vert cross product result */
+Vert cross(Vert a, Vert b);
+
+/* Calculate the Z value from x,y using cross and vert of equation of plane
+ * @params x,y our input x and y values
+ * @param c cross product vertex from equation of plane
+ * @param v point from our original triangle from equation of plane */
+float calcZ(float x, float y, Vert c, Vert v);
+
 /* Project a triangle with a perspective matrix
  * @param t the triangle
  * @param m the perspective matrix */

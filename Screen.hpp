@@ -13,6 +13,10 @@ class Screen {
 	public:
 		// 2D Vector that stores the 'pixels' we print
 		std::vector<std::vector<char>> buffer;
+		std::vector<std::vector<float>> zBuffer;
+
+		Vert zCross; // Our cross product for zBuffer calculation
+		Vert zVert; // Our vert for interpolating Z for pixel
 
 		// Screen width and height
 		int width, height;
@@ -105,5 +109,11 @@ class Screen {
 		 * to make the +y direction go up instead of down
 		 * @param t the triangle */
 		void centerFlipY(Trig& t);
+
+		/* Check the Z Buffer at a specific location
+		 * @params x,y the x and y coordinate in z buffer
+		 * @param z the z we want to check with
+		 * @return if the z we check with is > than z in z buffer */
+		bool checkZB(float x, float y, float z);
 
 };

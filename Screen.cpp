@@ -18,6 +18,7 @@ Screen::Screen(int w, int h, Camera& c, LightD l) {
 	shadeValues = ".:*+=%#@";
 	// Allocate memory to our screen buffer. Fill with empty chars
 	buffer.resize(height, std::vector<char>(width, fillChar));
+	zBuffer.resize(height, std::vector<float>(width, 100000.f));
 }
 
 // Print the contents of the screen buffer
@@ -35,6 +36,8 @@ void Screen::print() {
 void Screen::clear() {
 	buffer.clear();
 	buffer.resize(height, std::vector<char>(width, fillChar));
+	zBuffer.clear();
+	zBuffer.resize(height, std::vector<float>(width, 100000.f));
 }
 
 /* Draw to the buffer at a specific point. Does bounds checking
@@ -45,8 +48,20 @@ void Screen::drawToBuffer(float x, float y, char c) {
 	if (x < width && y < height && x >= 0 && y >= 0) {
 		x = round(x);
 		y = round(y);
-		buffer[y][x] = c;
+		float z = calcZ(x, y, zCross, zVert);
+		if(checkZB(x, y, z)) {
+			buffer[y][x] = c;
+			zBuffer[y][x] = z;
+		}
 	}
+}
+
+/* Check the Z Buffer at a specific location
+ * @params x,y the x and y coordinate in z buffer
+ * @param z the z we want to check with
+ * @return if the z we check with is > than z in z buffer */
+bool Screen::checkZB(float x, float y, float z) {
+	return z < zBuffer[y][x];
 }
 
 /* Draw a line to the buffer using individual coordinates
@@ -238,6 +253,15 @@ void Screen::shadeMesh(Mesh m) {
 	for (auto &trig : m.trigs) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
+			std::cout << trig.verts[0].z << std::endl;
+			std::cout << trig.verts[1].z << std::endl;
+			std::cout << trig.verts[2].z << std::endl;
+
+			Vert v1 = direc(trig.verts[0], trig.verts[1]);
+			Vert v2 = direc(trig.verts[0], trig.verts[2]);
+
+			zCross = cross(v1, v2);
+			zVert = trig.verts[0];
 
 			centerFlipY(trig);
 
@@ -264,6 +288,7 @@ void Screen::shadeMesh(Mesh m) {
 
 				float b1 = trig.verts[0].y - (m1 * trig.verts[0].x);
 				Vert n((trig.verts[1].y-b1)/m1, trig.verts[1].y, 0.0f);
+				n.z = calcZ(n.x, n.y, zCross, zVert);
 				Trig fb(trig.verts[0], n, trig.verts[1], 0.0f, 0.0f, 0.0f);
 				Trig ft(n, trig.verts[1], trig.verts[2], 0.0f, 0.0f, 0.0f);
 				fillFt(ft, c);

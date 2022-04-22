@@ -17,12 +17,18 @@ int main() {
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
 	/*
-	Vert p1(0.0f, 1.0f, 0.0f);
-	Vert p2(-1.0f, -1.0f, 0.0f);
-	Vert p3(1.0f, -1.0f, 0.0f);
+	Vert p1(0.0f, 0.5f, 0.0f);
+	Vert p2(-0.5f, -0.5f, 0.0f);
+	Vert p3(0.5f, -0.5f, 0.0f);
 	Trig t1(p1, p2, p3, 0.0f, 0.0f, 1.0f);
 
-	Mesh t; */
+	Vert p4(0.0f, 0.5f, 0.0f);
+	Vert p5(-0.5f, -0.5f, 0.0f);
+	Vert p6(0.5f, -0.5f, 0.0f);
+	Trig t2(p4, p5, p6, 0.0f, 0.0f, 1.0f);
+
+	Mesh t;
+	Mesh tt; */
 
 	// Front Face
 	Vert p1(-1.0f, 1.0f, 1.0f);
@@ -89,20 +95,20 @@ int main() {
 		cube2.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube3.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		//cube.scale(0.5f, 0.5f, 0.5f);
-		cube.rotZ(deg);
-		cube.rotX(deg);
-		cube2.rotZ(-deg*1.5f);
-		cube2.rotX(-deg*1.5f);
-		cube3.rotZ(-deg*1.7f);
-		cube3.rotX(-deg*1.7f);
+		cube.rotZ(45);
+		cube.rotX(45);
+		cube2.rotZ(deg);
+		cube2.rotX(deg);
+		//cube3.rotZ(-deg*1.7f);
+		//cube3.rotX(-deg*1.7f);
 		deg += 0.01f;
 		cube.translate(-1.0f, 0.0f, -4.f);
-		cube2.translate(4.0f, 0.0f, -8.f);
-		cube3.translate(2.0f, 8.0f, -12.f);
+		cube2.translate(1.0f, 0.0f, -8.f);
+		//cube3.translate(2.0f, 8.0f, -12.f);
 		//screen.fillMesh(cube, '#');
-		screen.drawMesh(cube, 'o');
 		screen.shadeMesh(cube2);
-		screen.shadeMesh(cube3);
+		screen.shadeMesh(cube);
+		//screen.shadeMesh(cube3);
 		//screen.drawMesh(cube, '*');
 		//screen.fillMesh(cube2, '#');
 		//screen.drawMesh(cube2, '*');
@@ -111,15 +117,18 @@ int main() {
 
 		/*
 		t.trigs = {t1};
+		tt.trigs = {t2};
 
-		//t.rotX(deg);
+		t.rotX(45.0f);
 		//deg += 0.005f;
-		t.translate(0.0f, 0.0f, -20.f);
-		t.scale(100.0f, 100.0f, 1.0f);
+		t.translate(-0.0f, 0.0f, -1.5f);
+		tt.translate(0.0f, 0.0f, -3.00f);
+		//deg += 0.001f;
 
 		//screen.drawMesh(t, '*');
 		//screen.fillMesh(t, '#');
-		screen.shadeMesh(t); */
+		screen.shadeMesh(t);
+		screen.shadeMesh(tt);*/
 
 
 		screen.print();
