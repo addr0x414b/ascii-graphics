@@ -3,6 +3,7 @@
 #include "Camera.hpp"
 #include <iostream>
 #include <algorithm>
+#include "Lights.hpp"
 
 // Global variables
 int gScreenWidth = 150;
@@ -12,12 +13,13 @@ float gAspect = (float)gScreenWidth / gScreenHeight;
 int main() {
 
 	Camera camera(0.0f, 0.0f, 20.0f, gAspect);
-	Screen screen(gScreenWidth, gScreenHeight, camera);
+	LightD light;
+	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
 	/*
-	Vert p1(1.35f, 1.0f, 0.0f);
-	Vert p2(1.25f, -2.0f, 0.0f);
-	Vert p3(-2.0f, 2.0f, 0.0f);
+	Vert p1(0.0f, 1.0f, 0.0f);
+	Vert p2(-1.0f, -1.0f, 0.0f);
+	Vert p3(1.0f, -1.0f, 0.0f);
 	Trig t1(p1, p2, p3, 0.0f, 0.0f, 1.0f);
 
 	Mesh t; */
@@ -88,28 +90,32 @@ int main() {
 		cube3.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube.rotZ(deg);
 		cube.rotX(deg);
-		cube2.rotZ(-deg*1.5f);
-		cube2.rotX(-deg*1.5f);
-		cube3.rotZ(-deg*1.7f);
-		cube3.rotX(-deg*1.7f);
+		//cube2.rotZ(-deg*1.5f);
+		//cube2.rotX(-deg*1.5f);
+		//cube3.rotZ(-deg*1.7f);
+		//cube3.rotX(-deg*1.7f);
 		deg += 0.01f;
 		cube.translate(-1.0f, 0.0f, -20.f);
-		cube2.translate(3.0f, 0.0f, -40.f);
-		cube3.translate(2.0f, 5.0f, -60.f);
-		screen.fillMesh(cube, '#');
-		screen.drawMesh(cube, '*');
-		screen.fillMesh(cube2, '#');
-		screen.drawMesh(cube2, '*');
-		screen.fillMesh(cube3, '#');
-		screen.drawMesh(cube3, '*');
+		//cube2.translate(3.0f, 0.0f, -40.f);
+		//cube3.translate(2.0f, 5.0f, -60.f);
+		//screen.fillMesh(cube, '#');
+		screen.shadeMesh(cube);
+		//screen.drawMesh(cube, '*');
+		//screen.fillMesh(cube2, '#');
+		//screen.drawMesh(cube2, '*');
+		//screen.fillMesh(cube3, '#');
+		//screen.drawMesh(cube3, '*');
 
 		/*
 		t.trigs = {t1};
 
+		t.rotX(deg);
+		deg += 0.005f;
 		t.translate(0.0f, 0.0f, -20.f);
 
 		screen.drawMesh(t, '*');
-		screen.fillMesh(t, '#'); */
+		screen.fillMesh(t, '#');
+		screen.shadeMesh(t); */
 
 
 		screen.print();

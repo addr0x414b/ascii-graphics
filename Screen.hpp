@@ -6,6 +6,7 @@
 #include <vector>
 #include "agm.hpp"
 #include "Camera.hpp"
+#include "Lights.hpp"
 
 // Screen simulation that allows printing ascii characters to the terminal
 class Screen {
@@ -15,6 +16,8 @@ class Screen {
 
 		// Screen width and height
 		int width, height;
+
+		std::string shadeValues;
 
 		// What our screen buffer is filled with. By default it's an empty space, so
 		// that the screen is empty. Can change for debug/style purposes
@@ -26,11 +29,15 @@ class Screen {
 		// Our projection matrix for the screen
 		Mat4 projMat;
 
+		// The light in the scene
+		LightD light;
+
 		/* Default constructor
 		 * @param w the screen width
 		 * @param h the screen height
-		 * @param c our screens camera */
-		Screen(int w, int h, Camera c);
+		 * @param c our screens camera
+		 * @param l our scenes light */
+		Screen(int w, int h, Camera c, LightD l);
 
 		// Print the contents of the screen buffer
 		void print();
@@ -71,6 +78,10 @@ class Screen {
 		 * @param m the mesh
 		 * @param c the draw character */
 		void fillMesh(Mesh m, char c);
+
+		/* Shade in the mesh based on the light
+		 * @param m the mesh */
+		void shadeMesh(Mesh m);
 
 		/* Fill a flat bottom triangle
 		 * @param t the triangle
