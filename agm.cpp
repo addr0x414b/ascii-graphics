@@ -11,6 +11,9 @@ Vert::Vert(float xx, float yy, float zz) {
 	y = yy;
 	z = zz;
 }
+
+/* Default constructor - create a vertex
+ * Default values: x,y,z = 0 */
 Vert::Vert() {
 	x = 0.0f;
 	y = 0.0f;
@@ -106,10 +109,8 @@ void Mesh::rotZ(float degrees) {
 	}
 }
 
-/* Translate the mesh in any direction
- * @param x amount in x axis
- * @param y amount in y axis
- * @param z amount in z axis */
+/* Translate the mesh
+ * @params x,y,z amount to translate in the x,y,z axis */
 void Mesh::translate(float x, float y, float z) {
 	for (auto &trig : trigs) {
 		trig.verts[0].x += x;
@@ -127,9 +128,7 @@ void Mesh::translate(float x, float y, float z) {
 }
 
 /* Scale the mesh
- * @param x amount in x axis
- * @param y amount in y axis
- * @param z amount in z axis */
+ * @params x,y,z amount to scale in the x,y,z axis */
 void Mesh::scale(float x, float y, float z) {
 	for (auto &trig : trigs) {
 		trig.verts[0].x *= x;
@@ -144,15 +143,19 @@ void Mesh::scale(float x, float y, float z) {
 		trig.verts[2].y *= y;
 		trig.verts[2].z *= z;
 
-		trig.fNormal.x *= x;
+		// I'm adding this comment to remind me that for uneven scaling (such as
+		// scaling y by 0.5 and x/z by 2) will mess with the normals, thus focing
+		// you multiply by the inverse transpose of the transformation
+		/*trig.fNormal.x *= x;
 		trig.fNormal.y *= y;
 		trig.fNormal.z *= z;
 
-		float l = sqrtf(trig.fNormal.x*trig.fNormal.x + trig.fNormal.y*trig.fNormal.y + trig.fNormal.z*trig.fNormal.z);
+		float l = sqrtf(trig.fNormal.x*trig.fNormal.x + trig.fNormal.y*
+		trig.fNormal.y + trig.fNormal.z*trig.fNormal.z);
 
 		trig.fNormal.x /= l;
 		trig.fNormal.y /= l;
-		trig.fNormal.z /= l;
+		trig.fNormal.z /= l;*/
 	}
 }
 
@@ -190,7 +193,7 @@ float dot(Vert a, Vert b) {
 	return ((a.x*b.x) + (a.y*b.y) + (a.z*b.z));
 }
 
-/* Calculate the direction vector a->b
+/* Calculate the direction vector b->a
  * @params a,b vertices
  * @return Vert direction vector result */
 Vert direc(Vert a, Vert b) {

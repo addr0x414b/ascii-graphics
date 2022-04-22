@@ -12,7 +12,7 @@ float gAspect = (float)gScreenHeight / gScreenWidth;
 
 int main() {
 
-	Camera camera(0.0f, 0.0f, 20.0f, gAspect, 20.f, 0.1f, 100.f);
+	Camera camera(0.0f, 0.0f, 20.0f, gAspect);
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
@@ -88,21 +88,21 @@ int main() {
 		cube.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube2.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube3.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
-		cube.scale(1.f, 1.f, 1.f);
+		//cube.scale(0.5f, 0.5f, 0.5f);
 		cube.rotZ(deg);
 		cube.rotX(deg);
-		//cube2.rotZ(-deg*1.5f);
-		//cube2.rotX(-deg*1.5f);
-		//cube3.rotZ(-deg*1.7f);
-		//cube3.rotX(-deg*1.7f);
+		cube2.rotZ(-deg*1.5f);
+		cube2.rotX(-deg*1.5f);
+		cube3.rotZ(-deg*1.7f);
+		cube3.rotX(-deg*1.7f);
 		deg += 0.01f;
-		cube.translate(0.0f, 0.0f, -4.f);
-		//cube2.translate(3.0f, 0.0f, -40.f);
-		//cube3.translate(2.0f, 5.0f, -60.f);
+		cube.translate(-1.0f, 0.0f, -4.f);
+		cube2.translate(4.0f, 0.0f, -8.f);
+		cube3.translate(2.0f, 8.0f, -12.f);
 		//screen.fillMesh(cube, '#');
-		screen.shadeMesh(cube);
-		//screen.shadeMesh(cube2);
-		//screen.shadeMesh(cube3);
+		screen.drawMesh(cube, 'o');
+		screen.shadeMesh(cube2);
+		screen.shadeMesh(cube3);
 		//screen.drawMesh(cube, '*');
 		//screen.fillMesh(cube2, '#');
 		//screen.drawMesh(cube2, '*');

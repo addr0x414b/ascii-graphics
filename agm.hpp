@@ -52,11 +52,11 @@ class Mesh {
 		void rotX(float degrees);
 
 		/* Translate the mesh
-		 * @param x amount in x axis
-		 * @param y amount in y axis
-		 * @param z amount in z axis */
+		 * @params x,y,z amount to translate in the x,y,z axis */
 		void translate(float x, float y, float z);
 
+		/* Scale the mesh
+		 * @params x,y,z amount to scale in the x,y,z axis */
 		void scale(float x, float y, float z);
 };
 
@@ -89,7 +89,7 @@ Vert mult4(Vert v, Mat4 m);
  * @return float result */
 float dot(Vert a, Vert b);
 
-/* Calculate the direction vector a->b
+/* Calculate the direction vector b->a
  * @params a,b vertices
  * @return Vert direction vector result */
 Vert direc(Vert a, Vert b);

@@ -100,4 +100,10 @@ class Screen {
 		 * @param c the character we draw to the buffer */
 		void drawToBuffer(float x, float y, char c);
 
+		/* Bring the triangle to the center of the screen. This makes the global
+		 * coord of (0,0,0) in the center of the screen. Also flip the y coordinates
+		 * to make the +y direction go up instead of down
+		 * @param t the triangle */
+		void centerFlipY(Trig& t);
+
 };

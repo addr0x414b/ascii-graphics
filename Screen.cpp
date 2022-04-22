@@ -116,35 +116,7 @@ void Screen::drawMesh(Mesh m, char c) {
 
 			project(trig, camera.projMat);
 
-			/*
-			trig.verts[0].x *= 0.6f * (float)width;
-			trig.verts[0].y *= -0.6f * (float)height/2;
-			trig.verts[1].x *= 0.6f * (float)width;
-			trig.verts[1].y *= -0.6f * (float)height/2;
-			trig.verts[2].x *= 0.6f * (float)width;
-			trig.verts[2].y *= -0.6f * (float)height/2;
-			*/
-
-			//trig.verts[0].x *= (float)width/2;
-			//trig.verts[0].y *= (float)height/2/2;
-			//trig.verts[1].x *= (float)width/2;
-			//trig.verts[1].y *= (float)height/2/2;
-			//trig.verts[2].x *= (float)width/2;
-			//trig.verts[2].y *= (float)height/2/2;
-
-			trig.verts[0].x *= 100.f;
-			trig.verts[0].y *= -100.f/6;
-			trig.verts[1].x *= 100.f;
-			trig.verts[1].y *= -100.f/6;
-			trig.verts[2].x *= 100.f;
-			trig.verts[2].y *= -100.f/6;
-
-			trig.verts[0].x += (float)width/2;
-			trig.verts[0].y += (float)height/2;
-			trig.verts[1].x += (float)width/2;
-			trig.verts[1].y += (float)height/2;
-			trig.verts[2].x += (float)width/2;
-			trig.verts[2].y += (float)height/2;
+			centerFlipY(trig);
 
 			drawTrig(trig, c);
 		}
@@ -158,19 +130,7 @@ void Screen::drawMeshWire(Mesh m, char c) {
 	for (auto &trig : m.trigs) {
 		project(trig, camera.projMat);
 
-		trig.verts[0].x *= 100.f;
-		trig.verts[0].y *= -100.f/6;
-		trig.verts[1].x *= 100.f;
-		trig.verts[1].y *= -100.f/6;
-		trig.verts[2].x *= 100.f;
-		trig.verts[2].y *= -100.f/6;
-
-		trig.verts[0].x += (float)width/2;
-		trig.verts[0].y += (float)height/2;
-		trig.verts[1].x += (float)width/2;
-		trig.verts[1].y += (float)height/2;
-		trig.verts[2].x += (float)width/2;
-		trig.verts[2].y += (float)height/2;
+		centerFlipY(trig);
 		drawTrig(trig, c);
 	}
 }
@@ -183,19 +143,7 @@ void Screen::fillMesh(Mesh m, char c) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
 
-			trig.verts[0].x *= 100.f;
-			trig.verts[0].y *= -100.f/6;
-			trig.verts[1].x *= 100.f;
-			trig.verts[1].y *= -100.f/6;
-			trig.verts[2].x *= 100.f;
-			trig.verts[2].y *= -100.f/6;
-
-			trig.verts[0].x += (float)width/2;
-			trig.verts[0].y += (float)height/2;
-			trig.verts[1].x += (float)width/2;
-			trig.verts[1].y += (float)height/2;
-			trig.verts[2].x += (float)width/2;
-			trig.verts[2].y += (float)height/2;
+			centerFlipY(trig);
 
 			std::sort(trig.verts, trig.verts + 3,
 					[](Vert const& a, Vert const& b) -> bool {
@@ -207,7 +155,9 @@ void Screen::fillMesh(Mesh m, char c) {
 			} else if (trig.verts[0].y == trig.verts[1].y) {
 				fillFt(trig, c);
 			} else {
-				float m1 = (trig.verts[0].y - trig.verts[2].y) / (trig.verts[0].x - trig.verts[2].x);
+				float m1 = (trig.verts[0].y - trig.verts[2].y) /
+					(trig.verts[0].x - trig.verts[2].x);
+
 				float b1 = trig.verts[0].y - (m1 * trig.verts[0].x);
 				Vert n((trig.verts[1].y-b1)/m1, trig.verts[1].y, 0.0f);
 				Trig fb(trig.verts[0], n, trig.verts[1], 0.0f, 0.0f, 0.0f);
@@ -250,7 +200,6 @@ void Screen::fillFb(Trig t, char c) {
 		}
 		drawLine(x1, y, x2, y, c);
 	}
-	//drawTrig(t, c);
 }
 
 /* Fill a flat top triangle
@@ -281,7 +230,6 @@ void Screen::fillFt(Trig t, char c) {
 		}
 		drawLine(x1, y, x2, y, c);
 	}
-	//drawTrig(t, c);
 }
 
 /* Shade in the mesh based on the light
@@ -291,24 +239,7 @@ void Screen::shadeMesh(Mesh m) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
 
-			/*
-			trig.verts[0].x *= 100.f;
-			trig.verts[0].y *= -100.f/6;
-			trig.verts[1].x *= 100.f;
-			trig.verts[1].y *= -100.f/6;
-			trig.verts[2].x *= 100.f;
-			trig.verts[2].y *= -100.f/6; */
-
-			//trig.verts[0].y /= -6;
-			//trig.verts[1].y /= -6;
-			//trig.verts[2].y /= -6;
-
-			trig.verts[0].x += (float)width/2;
-			trig.verts[0].y += (float)height/2;
-			trig.verts[1].x += (float)width/2;
-			trig.verts[1].y += (float)height/2;
-			trig.verts[2].x += (float)width/2;
-			trig.verts[2].y += (float)height/2;
+			centerFlipY(trig);
 
 			float shade = round((abs(dot(trig.fNormal, light.direction)) * 8)) - 1;
 
@@ -328,7 +259,9 @@ void Screen::shadeMesh(Mesh m) {
 			} else if (trig.verts[0].y == trig.verts[1].y) {
 				fillFt(trig, c);
 			} else {
-				float m1 = (trig.verts[0].y - trig.verts[2].y) / (trig.verts[0].x - trig.verts[2].x);
+				float m1 = (trig.verts[0].y - trig.verts[2].y) /
+					(trig.verts[0].x - trig.verts[2].x);
+
 				float b1 = trig.verts[0].y - (m1 * trig.verts[0].x);
 				Vert n((trig.verts[1].y-b1)/m1, trig.verts[1].y, 0.0f);
 				Trig fb(trig.verts[0], n, trig.verts[1], 0.0f, 0.0f, 0.0f);
@@ -339,4 +272,21 @@ void Screen::shadeMesh(Mesh m) {
 			drawTrig(trig, c);
 		}
 	}
+}
+
+/* Bring the triangle to the center of the screen. This makes the global
+ * coord of (0,0,0) in the center of the screen. Also flip the y coordinates
+ * to make the +y direction go up instead of down
+ * @param t the triangle */
+void Screen::centerFlipY(Trig& t) {
+	t.verts[0].y /= -1;
+	t.verts[1].y /= -1;
+	t.verts[2].y /= -1;
+
+	t.verts[0].x += (float)width/2;
+	t.verts[0].y += (float)height/2;
+	t.verts[1].x += (float)width/2;
+	t.verts[1].y += (float)height/2;
+	t.verts[2].x += (float)width/2;
+	t.verts[2].y += (float)height/2;
 }
