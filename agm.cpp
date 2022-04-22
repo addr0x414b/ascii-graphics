@@ -106,26 +106,6 @@ void Mesh::rotZ(float degrees) {
 	}
 }
 
-/* Project the points of the mesh onto a 2d plane
- * @params aspect our screen aspect ratio
- * @params fov our field of view
- * @params zNear our near clipping plane
- * @params zFar our far clipping plane
-void Mesh::project(float aspect, float fov, float zNear, float zFar) {
-	Mat4 m = perspective(aspect, fov, zNear, zFar);
-
-	for (auto &trig : trigs) {
-		Vert a = mult4(trig.verts[0], m);
-		Vert b = mult4(trig.verts[1], m);
-		Vert c = mult4(trig.verts[2], m);
-
-		trig.verts[0] = a;
-		trig.verts[1] = b;
-		trig.verts[2] = c;
-	}
-}
-*/
-
 /* Translate the mesh in any direction
  * @param x amount in x axis
  * @param y amount in y axis
@@ -149,7 +129,7 @@ void Mesh::translate(float x, float y, float z) {
 /* Scale the mesh
  * @param x amount in x axis
  * @param y amount in y axis
- * @param z amount in z axis
+ * @param z amount in z axis */
 void Mesh::scale(float x, float y, float z) {
 	for (auto &trig : trigs) {
 		trig.verts[0].x *= x;
@@ -164,11 +144,17 @@ void Mesh::scale(float x, float y, float z) {
 		trig.verts[2].y *= y;
 		trig.verts[2].z *= z;
 
-		//trig.fNormal.x *= x;
-		//trig.fNormal.y *= y;
-		//trig.fNormal.z *= z;
+		trig.fNormal.x *= x;
+		trig.fNormal.y *= y;
+		trig.fNormal.z *= z;
+
+		float l = sqrtf(trig.fNormal.x*trig.fNormal.x + trig.fNormal.y*trig.fNormal.y + trig.fNormal.z*trig.fNormal.z);
+
+		trig.fNormal.x /= l;
+		trig.fNormal.y /= l;
+		trig.fNormal.z /= l;
 	}
-}*/
+}
 
 /* Multiply a vertex by a 4x4 matrix
  * @param v our vertex

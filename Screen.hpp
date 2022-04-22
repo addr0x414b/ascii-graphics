@@ -37,7 +37,7 @@ class Screen {
 		 * @param h the screen height
 		 * @param c our screens camera
 		 * @param l our scenes light */
-		Screen(int w, int h, Camera c, LightD l);
+		Screen(int w, int h, Camera& c, LightD l);
 
 		// Print the contents of the screen buffer
 		void print();

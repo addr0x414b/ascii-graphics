@@ -9,7 +9,7 @@
  * @param h the screen height
  * @param c our screens camera
  * @param l our scenes light */
-Screen::Screen(int w, int h, Camera c, LightD l) {
+Screen::Screen(int w, int h, Camera& c, LightD l) {
 	camera = c;
 	width = w;
 	height = h;
@@ -291,12 +291,17 @@ void Screen::shadeMesh(Mesh m) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
 
+			/*
 			trig.verts[0].x *= 100.f;
 			trig.verts[0].y *= -100.f/6;
 			trig.verts[1].x *= 100.f;
 			trig.verts[1].y *= -100.f/6;
 			trig.verts[2].x *= 100.f;
-			trig.verts[2].y *= -100.f/6;
+			trig.verts[2].y *= -100.f/6; */
+
+			//trig.verts[0].y /= -6;
+			//trig.verts[1].y /= -6;
+			//trig.verts[2].y /= -6;
 
 			trig.verts[0].x += (float)width/2;
 			trig.verts[0].y += (float)height/2;

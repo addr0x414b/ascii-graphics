@@ -15,11 +15,14 @@ class Vert {
 	public:
 		float x, y, z; // Our points to the vertex
 
-		/* Default constructor
+		/* Default constructor - create a vertex
 		 * @param xx our x position
 		 * @param yy our y position
 		 * @param zz our z position */
 		Vert(float xx, float yy, float zz);
+
+		/* Default constructor - create a vertex
+		 * Default values: x,y,z = 0 */
 		Vert();
 };
 
@@ -29,11 +32,10 @@ class Trig {
 		Vert verts[3];
 		Vert fNormal; // Face normal vector
 
-		/* Default constructor
+		/* Default constructor - create a triangle
 		 * @params p1,p2,p3 vertices of the triangle
 		 * @params x,y,z the face normal of the triangle */
 		Trig(Vert p1, Vert p2, Vert p3, float x, float y, float z);
-		Trig();
 };
 
 // Mesh, consists of triangles
@@ -49,21 +51,13 @@ class Mesh {
 		 * @param degrees how much we rotate by in degrees */
 		void rotX(float degrees);
 
-		/* Project the points of the mesh onto a 2d plane
-		 * @param aspect our screen aspect ratio
-		 * @param fov our field of view
-		 * @param zNear our near clipping plane
-		 * @param zFar our far clipping plane */
-		//void project(float aspect, float fov, float zNear, float zFar);
-
-
 		/* Translate the mesh
 		 * @param x amount in x axis
 		 * @param y amount in y axis
 		 * @param z amount in z axis */
 		void translate(float x, float y, float z);
 
-		//void scale(float x, float y, float z);
+		void scale(float x, float y, float z);
 };
 
 /* Creates a Mat4 with the perspective projection matrix values applied
