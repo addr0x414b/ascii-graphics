@@ -61,3 +61,7 @@ float calcZ(float x, float y, Vert c, Vert v);
  * @param t the triangle
  * @param m the perspective matrix */
 void project(Trig& t, Mat4 m);
+
+/* Reform all transformations on the triangle
+ * @param t the triangle */
+void unTransform(Trig& t);

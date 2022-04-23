@@ -30,6 +30,17 @@ Trig::Trig(Vert p1, Vert p2, Vert p3, float x, float y, float z) {
 	fNormal = n;
 }
 
+/* Default constructor - Set default translation/rotation amounts */
+Mesh::Mesh() {
+	transAmt.x = 0.0f;
+	transAmt.y = 0.0f;
+	transAmt.z = 0.0f;
+
+	rotAmt.x = 0.0f;
+	rotAmt.y = 0.0f;
+	rotAmt.z = 0.0f;
+}
+
 /* Default constructor - creates a simple unit cube. Inherits from mesh */
 Cube::Cube() {
 	// Front Face
@@ -88,5 +99,13 @@ Cube::Cube() {
 	Trig t12(p34, p35, p36, 0.0f, -1.0f, 0.0f);
 
 	trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
+
+	transAmt.x = 0.0f;
+	transAmt.y = 0.0f;
+	transAmt.z = 0.0f;
+
+	rotAmt.x = 0.0f;
+	rotAmt.y = 0.0f;
+	rotAmt.z = 0.0f;
 
 }

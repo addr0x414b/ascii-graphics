@@ -36,6 +36,12 @@ class Mesh {
 	public:
 		std::vector<Trig> trigs; // All of the triangles in the mesh
 
+		Vert transAmt;
+		Vert rotAmt;
+
+		/* Default constructor - Set default translation/rotation amounts */
+		Mesh();
+
 		/* Rotate the mesh along the Z axis
 		 * @param degrees how much we rotate by in degrees */
 		void rotZ(float degrees);
@@ -51,6 +57,15 @@ class Mesh {
 		/* Scale the mesh
 		 * @params x,y,z amount to scale in the x,y,z axis */
 		void scale(float x, float y, float z);
+
+		/* Undo translation */
+		void unTranslate();
+
+		/* Undo rotation on the Z axis */
+		void unRotateZ();
+
+		/* Undo rotation on the X axis */
+		void unRotateX();
 };
 
 class Cube : public Mesh {

@@ -58,6 +58,9 @@ Mat4 rotZ(float degrees) {
 void Mesh::rotX(float degrees) {
 	Mat4 m = ::rotX(degrees);
 
+	unTranslate();
+	unRotateX();
+	rotAmt.x = degrees;
 	for (auto &trig : trigs) {
 		trig.verts[0] = mult4(trig.verts[0], m);
 		trig.verts[1] = mult4(trig.verts[1], m);
@@ -72,6 +75,9 @@ void Mesh::rotX(float degrees) {
 void Mesh::rotZ(float degrees) {
 	Mat4 m = ::rotZ(degrees);
 
+	unTranslate();
+	unRotateZ();
+	rotAmt.z = degrees;
 	for (auto &trig : trigs) {
 		trig.verts[0] = mult4(trig.verts[0], m);
 		trig.verts[1] = mult4(trig.verts[1], m);
@@ -83,6 +89,10 @@ void Mesh::rotZ(float degrees) {
 /* Translate the mesh
  * @params x,y,z amount to translate in the x,y,z axis */
 void Mesh::translate(float x, float y, float z) {
+	unTranslate();
+	transAmt.x = x;
+	transAmt.y = y;
+	transAmt.z = z;
 	for (auto &trig : trigs) {
 		trig.verts[0].x += x;
 		trig.verts[0].y += y;
@@ -128,6 +138,55 @@ void Mesh::scale(float x, float y, float z) {
 		trig.fNormal.y /= l;
 		trig.fNormal.z /= l;*/
 	}
+}
+
+/* Undo rotation on the X axis */
+void Mesh::unRotateX() {
+
+	Mat4 m = ::rotX(-rotAmt.x);
+
+	for (auto &trig : trigs) {
+		trig.verts[0] = mult4(trig.verts[0], m);
+		trig.verts[1] = mult4(trig.verts[1], m);
+		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.fNormal = mult4(trig.fNormal, m);
+	}
+	rotAmt.x = 0.0f;
+}
+
+/* Undo rotation on the Z axis */
+void Mesh::unRotateZ() {
+
+	Mat4 m = ::rotZ(-rotAmt.z);
+	for (auto &trig : trigs) {
+		trig.verts[0] = mult4(trig.verts[0], m);
+		trig.verts[1] = mult4(trig.verts[1], m);
+		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.fNormal = mult4(trig.fNormal, m);
+	}
+	rotAmt.z = 0.0f;
+}
+
+/* Undo translation */
+void Mesh::unTranslate() {
+
+	for (auto &trig : trigs) {
+		trig.verts[0].x -= transAmt.x;
+		trig.verts[0].y -= transAmt.y;
+		trig.verts[0].z -= transAmt.z;
+
+		trig.verts[1].x -= transAmt.x;
+		trig.verts[1].y -= transAmt.y;
+		trig.verts[1].z -= transAmt.z;
+
+		trig.verts[2].x -= transAmt.x;
+		trig.verts[2].y -= transAmt.y;
+		trig.verts[2].z -= transAmt.z;
+
+	}
+	transAmt.x = 0.0f;
+	transAmt.y = 0.0f;
+	transAmt.z = 0.0f;
 }
 
 /* Multiply a vertex by a 4x4 matrix
