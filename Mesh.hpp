@@ -54,6 +54,10 @@ class Mesh {
 		 * @params x,y,z amount to translate in the x,y,z axis */
 		void translate(float x, float y, float z);
 
+		/* Translate the mesh statically, as in set the points and that's it
+		 * @params x,y,z amount to translate in the x,y,z axis */
+		void staticTranslate(float x, float y, float z);
+
 		/* Scale the mesh
 		 * @params x,y,z amount to scale in the x,y,z axis */
 		void scale(float x, float y, float z);
@@ -66,6 +70,10 @@ class Mesh {
 
 		/* Undo rotation on the X axis */
 		void unRotateX();
+
+		/* Rotate the mesh
+		 * @params x,y,z amount in each axis */
+		void rotate(float x, float y, float z);
 };
 
 class Cube : public Mesh {

@@ -37,6 +37,22 @@ Mat4 rotX(float degrees) {
 	return m;
 }
 
+/* Creates a Mat4 with the rotation matrix along the Y axis
+ * @param degrees the number of degrees to rotate
+ * @return Mat4 rotation matrix */
+Mat4 rotY(float degrees) {
+	Mat4 m;
+
+	m.m[0][0] = cosf(degrees);
+	m.m[0][2] = sinf(degrees);
+	m.m[1][1] = 1.0f;
+	m.m[2][0] = -sinf(degrees);
+	m.m[2][2] = cosf(degrees);
+	m.m[3][3] = 1.0f;
+
+	return m;
+}
+
 /* Creates a Mat4 with the rotation matrix along the Z axis
  * @param degrees the number of degrees to rotate
  * @return Mat4 rotation matrix */
@@ -53,46 +69,62 @@ Mat4 rotZ(float degrees) {
 	return m;
 }
 
-/* Rotate the mesh along the X axis
- * @param degrees how much we rotate by in degrees */
-void Mesh::rotX(float degrees) {
-	Mat4 m = ::rotX(degrees);
+/* Rotate the mesh
+ * @params x,y,z amount in each axis */
+void Mesh::rotate(float x, float y, float z) {
+
+	Mat4 xMat = ::rotX(x);
+	Mat4 yMat = ::rotY(y);
+	Mat4 zMat = ::rotZ(z);
 
 	unTranslate();
-	unRotateX();
-	rotAmt.x = degrees;
 	for (auto &trig : trigs) {
-		trig.verts[0] = mult4(trig.verts[0], m);
-		trig.verts[1] = mult4(trig.verts[1], m);
-		trig.verts[2] = mult4(trig.verts[2], m);
-		trig.fNormal = mult4(trig.fNormal, m);
+		trig.verts[0] = mult4(trig.verts[0], yMat);
+		trig.verts[1] = mult4(trig.verts[1], yMat);
+		trig.verts[2] = mult4(trig.verts[2], yMat);
+		trig.fNormal = mult4(trig.fNormal, yMat);
+
+		trig.verts[0] = mult4(trig.verts[0], xMat);
+		trig.verts[1] = mult4(trig.verts[1], xMat);
+		trig.verts[2] = mult4(trig.verts[2], xMat);
+		trig.fNormal = mult4(trig.fNormal, xMat);
+
+		trig.verts[0] = mult4(trig.verts[0], zMat);
+		trig.verts[1] = mult4(trig.verts[1], zMat);
+		trig.verts[2] = mult4(trig.verts[2], zMat);
+		trig.fNormal = mult4(trig.fNormal, zMat);
 	}
+	staticTranslate(transAmt.x, transAmt.y, transAmt.z);
 
-}
-
-/* Rotate the mesh along the Z axis
- * @param degrees how much we rotate by in degrees */
-void Mesh::rotZ(float degrees) {
-	Mat4 m = ::rotZ(degrees);
-
-	unTranslate();
-	unRotateZ();
-	rotAmt.z = degrees;
-	for (auto &trig : trigs) {
-		trig.verts[0] = mult4(trig.verts[0], m);
-		trig.verts[1] = mult4(trig.verts[1], m);
-		trig.verts[2] = mult4(trig.verts[2], m);
-		trig.fNormal = mult4(trig.fNormal, m);
-	}
 }
 
 /* Translate the mesh
  * @params x,y,z amount to translate in the x,y,z axis */
 void Mesh::translate(float x, float y, float z) {
-	unTranslate();
-	transAmt.x = x;
-	transAmt.y = y;
-	transAmt.z = z;
+	transAmt.x += x;
+	transAmt.y += y;
+	transAmt.z += z;
+	for (auto &trig : trigs) {
+		trig.verts[0].x += x;
+		trig.verts[0].y += y;
+		trig.verts[0].z += z;
+
+		trig.verts[1].x += x;
+		trig.verts[1].y += y;
+		trig.verts[1].z += z;
+
+		trig.verts[2].x += x;
+		trig.verts[2].y += y;
+		trig.verts[2].z += z;
+	}
+}
+
+/* Translate the mesh statically, as in set the points and that's it
+ * @params x,y,z amount to translate in the x,y,z axis */
+void Mesh::staticTranslate(float x, float y, float z) {
+	//transAmt.x = x;
+	//transAmt.y = y;
+	//transAmt.z = z;
 	for (auto &trig : trigs) {
 		trig.verts[0].x += x;
 		trig.verts[0].y += y;
@@ -184,9 +216,9 @@ void Mesh::unTranslate() {
 		trig.verts[2].z -= transAmt.z;
 
 	}
-	transAmt.x = 0.0f;
-	transAmt.y = 0.0f;
-	transAmt.z = 0.0f;
+	//transAmt.x = 0.0f;
+	//transAmt.y = 0.0f;
+	//transAmt.z = 0.0f;
 }
 
 /* Multiply a vertex by a 4x4 matrix

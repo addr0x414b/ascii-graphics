@@ -25,6 +25,11 @@ Mat4 perspective(float aspect, float fov, float zNear, float zFar);
  * @return Mat4 rotation matrix */
 Mat4 rotZ(float degrees);
 
+/* Creates a Mat4 with the rotation matrix along the Y axis
+ * @param degrees the number of degrees to rotate
+ * @return Mat4 rotation matrix */
+Mat4 rotY(float degrees);
+
 /* Creates a Mat4 with the rotation matrix along the X axis
  * @param degrees the number of degrees to rotate
  * @return Mat4 rotation matrix */
@@ -62,6 +67,3 @@ float calcZ(float x, float y, Vert c, Vert v);
  * @param m the perspective matrix */
 void project(Trig& t, Mat4 m);
 
-/* Reform all transformations on the triangle
- * @param t the triangle */
-void unTransform(Trig& t);

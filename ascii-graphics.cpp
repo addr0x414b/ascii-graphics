@@ -19,20 +19,19 @@ int main() {
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
-	float deg = 0.1f;
-
 	Cube cube;
+	Cube cube2;
 
+	cube.translate(0.0f, 0.0f, -3.f);
+	cube.rotate(0.5f, 0.0f, 0.0f);
+	cube2.translate(1.0f, 0.0f, -4.f);
 
 	while (1) {
 		screen.start();
 
-		cube.rotX(deg);
-		cube.rotZ(deg);
-		cube.translate(0.0f, 0.0f, -4.f);
-		deg += 1.f * screen.deltaTime;
-		screen.shadeMesh(cube);
 
+		screen.shadeMesh(cube2);
+		screen.shadeMesh(cube);
 		screen.print();
 		screen.clear();
 	}
