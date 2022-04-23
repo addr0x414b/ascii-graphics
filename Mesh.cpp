@@ -1,4 +1,8 @@
 #include "Mesh.hpp"
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <algorithm>
 
 /* Default constructor
  * @param xx our x position
@@ -28,6 +32,88 @@ Trig::Trig(Vert p1, Vert p2, Vert p3, float x, float y, float z) {
 
 	Vert n(x, y, z);
 	fNormal = n;
+}
+
+/* Default constructor - load an obj file mesh */
+Mesh::Mesh(std::string objFile) {
+
+	std::fstream file;
+	std::string index;
+	std::string x;
+	std::string y;
+	std::string z;
+
+	std::vector<std::string> vertices;
+	std::vector<std::string> normals;
+
+	file.open(objFile);
+	while(file >> index) {
+		if (index == "v") {
+			file >> x;
+			file >> y;
+			file >> z;
+			vertices.push_back(x + " " + y + " " + z);
+		} else if (index == "vn") {
+			file >> x;
+			file >> y;
+			file >> z;
+			normals.push_back(x + " " + y + " " + z);
+		} else if (index == "f") {
+			file >> x;
+			file >> y;
+			file >> z;
+			std::replace(x.begin(), x.end(), '/', ' ');
+			std::replace(y.begin(), y.end(), '/', ' ');
+			std::replace(z.begin(), z.end(), '/', ' ');
+
+			std::istringstream a(x);
+			std::istringstream b(y);
+			std::istringstream c(z);
+			std::string p1, n;
+			std::string p2;
+			std::string p3;
+			a >> p1 >> n;
+			b >> p2;
+			c >> p3;
+
+			std::istringstream v(vertices[std::stoi(p1)-1]);
+			v >> x;
+			v >> y;
+			v >> z;
+			Vert v1(std::stof(x), std::stof(y), std::stof(z));
+
+			std::istringstream vv(vertices[std::stoi(p2)-1]);
+			vv >> x;
+			vv >> y;
+			vv >> z;
+			Vert v2(std::stof(x), std::stof(y), std::stof(z));
+
+			std::istringstream vvv(vertices[std::stoi(p3)-1]);
+			vvv >> x;
+			vvv >> y;
+			vvv >> z;
+			Vert v3(std::stof(x), std::stof(y), std::stof(z));
+
+			std::istringstream norm(normals[std::stoi(n)-1]);
+			norm >> x;
+			norm >> y;
+			norm >> z;
+			Trig t(v1, v2, v3, std::stof(x), std::stof(y), std::stof(z));
+
+			trigs.push_back(t);
+
+			//std::cout << t.verts[0].x << ", " << t.verts[0].y << ", " << t.verts[0].z << std::endl;
+
+			//std::cout << p1 << " " << p2 << " " << p3 << std::endl;
+			//std::cout << vertices[0] << std::endl;
+			//std::cout << v3.x << std::endl;
+		}
+	}
+
+	std::istringstream v(vertices[0]);
+	v >> x;
+	//std::cout << normals[0] << std::endl;
+
 }
 
 /* Default constructor - Set default translation/rotation amounts */

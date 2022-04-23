@@ -287,5 +287,6 @@ void project(Trig& t, Mat4 m) {
 float calcZ(float x, float y, Vert c, Vert v) {
 	float k = dot(c, v);
 	float z = ((c.x*x + c.y*y - k) / (-c.z));
+	//float z = (1.f/c.z)*(c.x*v.x + c.y*v.y + c.z*v.z - c.x*x - c.y*y);
 	return z;
 }

@@ -42,13 +42,8 @@ class Mesh {
 		/* Default constructor - Set default translation/rotation amounts */
 		Mesh();
 
-		/* Rotate the mesh along the Z axis
-		 * @param degrees how much we rotate by in degrees */
-		void rotZ(float degrees);
-
-		/* Rotate the mesh along the X axis
-		 * @param degrees how much we rotate by in degrees */
-		void rotX(float degrees);
+		/* Default constructor - load an obj file mesh */
+		Mesh(std::string objFile);
 
 		/* Translate the mesh
 		 * @params x,y,z amount to translate in the x,y,z axis */

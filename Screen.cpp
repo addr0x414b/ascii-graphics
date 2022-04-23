@@ -27,7 +27,8 @@ Screen::Screen(int w, int h, Camera& c, LightD l) {
 void Screen::start() {
 		lastTime = currTime;
 		currTime = std::chrono::steady_clock::now();
-		auto dT = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - lastTime);
+		auto dT = std::chrono::duration_cast<std::chrono::milliseconds>
+			(currTime - lastTime);
 		deltaTime = dT.count() / 1000.f;
 }
 
@@ -39,7 +40,8 @@ void Screen::print() {
 		}
 		std::cout << "\n";
 	}
-	usleep(8500);
+	//usleep(8500);
+	usleep(10000);
 }
 
 // Clear the contents of the screen buffer
@@ -71,7 +73,7 @@ void Screen::drawToBuffer(float x, float y, char c) {
  * @param z the z we want to check with
  * @return if the z we check with is > than z in z buffer */
 bool Screen::checkZB(float x, float y, float z) {
-	return z < zBuffer[y][x];
+	return z <= zBuffer[y][x];
 }
 
 /* Draw a line to the buffer using individual coordinates
@@ -264,8 +266,8 @@ void Screen::shadeMesh(Mesh m) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
 
-			Vert v1 = direc(trig.verts[0], trig.verts[1]);
-			Vert v2 = direc(trig.verts[0], trig.verts[2]);
+			Vert v1 = direc(trig.verts[2], trig.verts[0]);
+			Vert v2 = direc(trig.verts[1], trig.verts[0]);
 
 			zCross = cross(v1, v2);
 			zVert = trig.verts[0];
