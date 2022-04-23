@@ -31,6 +31,7 @@ int main() {
 	Mesh t;
 	Mesh tt; */
 
+	/*
 	// Front Face
 	Vert p1(-1.0f, 1.0f, 1.0f);
 	Vert p2(-1.0f, -1.0f, 1.0f);
@@ -87,11 +88,13 @@ int main() {
 	Trig t12(p34, p35, p36, 0.0f, -1.0f, 0.0f);
 	Mesh cube;
 	Mesh cube2;
-	Mesh cube3;
+	Mesh cube3;*/
 	float deg = 0.1f;
 
 
+
 	while (1) {
+		/*
 		cube.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube2.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
 		cube3.trigs = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12};
@@ -114,7 +117,12 @@ int main() {
 		//screen.fillMesh(cube2, '#');
 		//screen.drawMesh(cube2, '*');
 		//screen.fillMesh(cube3, '#');
-		//screen.drawMesh(cube3, '*');
+		//screen.drawMesh(cube3, '*'); */
+
+		Cube cube;
+		cube.translate(0.0f, 0.0f, -4.f);
+		screen.shadeMesh(cube);
+
 
 		/*
 		t.trigs = {t1};

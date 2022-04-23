@@ -52,3 +52,9 @@ class Mesh {
 		 * @params x,y,z amount to scale in the x,y,z axis */
 		void scale(float x, float y, float z);
 };
+
+class Cube : public Mesh {
+	public:
+		/* Default constructor - creates a simple unit cube. Inherits from mesh */
+		Cube();
+};
