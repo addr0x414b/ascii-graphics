@@ -5,6 +5,8 @@
 #include <algorithm>
 #include "Lights.hpp"
 #include "Mesh.hpp"
+#include <chrono>
+#include <ctime>
 
 // Global variables
 int gScreenWidth = 150;
@@ -21,12 +23,14 @@ int main() {
 
 	Cube cube;
 
+
 	while (1) {
+		screen.start();
 
 		cube.rotX(deg);
-		cube.rotZ(1.f);
+		cube.rotZ(deg);
 		cube.translate(0.0f, 0.0f, -4.f);
-		deg += 0.01f;
+		deg += 1.f * screen.deltaTime;
 		screen.shadeMesh(cube);
 
 		screen.print();

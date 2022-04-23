@@ -8,6 +8,7 @@
 #include "Camera.hpp"
 #include "Lights.hpp"
 #include "Mesh.hpp"
+#include <chrono>
 
 // Screen simulation that allows printing ascii characters to the terminal
 class Screen {
@@ -21,6 +22,8 @@ class Screen {
 
 		// Screen width and height
 		int width, height;
+
+		float deltaTime;
 
 		std::string shadeValues;
 
@@ -49,6 +52,12 @@ class Screen {
 
 		// Clear the contents of the screen buffer
 		void clear();
+
+		// Calculate deltaTime and FPS
+		void start();
+
+		std::chrono::steady_clock::time_point lastTime;
+		std::chrono::steady_clock::time_point currTime;
 
 		/* Draw a line to the buffer using individual coordinates
 		 * @param x1 the x position of point 1

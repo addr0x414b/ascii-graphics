@@ -19,6 +19,16 @@ Screen::Screen(int w, int h, Camera& c, LightD l) {
 	// Allocate memory to our screen buffer. Fill with empty chars
 	buffer.resize(height, std::vector<char>(width, fillChar));
 	zBuffer.resize(height, std::vector<float>(width, 100000.f));
+	lastTime = std::chrono::steady_clock::now();
+	currTime = std::chrono::steady_clock::now();
+}
+
+// Calculate deltaTime and FPS
+void Screen::start() {
+		lastTime = currTime;
+		currTime = std::chrono::steady_clock::now();
+		auto dT = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - lastTime);
+		deltaTime = dT.count() / 1000.f;
 }
 
 // Print the contents of the screen buffer
