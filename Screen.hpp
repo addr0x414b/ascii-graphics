@@ -7,6 +7,7 @@
 #include "agm.hpp"
 #include "Camera.hpp"
 #include "Lights.hpp"
+#include "Mesh.hpp"
 
 // Screen simulation that allows printing ascii characters to the terminal
 class Screen {

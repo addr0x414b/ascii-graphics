@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Lights.hpp"
+#include "Mesh.hpp"
 
 // Global variables
 int gScreenWidth = 150;

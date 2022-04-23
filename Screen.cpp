@@ -253,9 +253,6 @@ void Screen::shadeMesh(Mesh m) {
 	for (auto &trig : m.trigs) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
-			std::cout << trig.verts[0].z << std::endl;
-			std::cout << trig.verts[1].z << std::endl;
-			std::cout << trig.verts[2].z << std::endl;
 
 			Vert v1 = direc(trig.verts[0], trig.verts[1]);
 			Vert v2 = direc(trig.verts[0], trig.verts[2]);

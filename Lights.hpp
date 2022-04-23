@@ -1,6 +1,7 @@
 #pragma once
 
 #include "agm.hpp"
+#include "Mesh.hpp"
 
 // Simple directional light
 class LightD {
