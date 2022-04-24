@@ -259,7 +259,7 @@ float dot(Vert a, Vert b) {
  * @params a,b vertices
  * @return Vert direction vector result */
 Vert direc(Vert a, Vert b) {
-	Vert r(a.x-b.x, a.y-b.y, a.z-b.y);
+	Vert r(a.x-b.x, a.y-b.y, a.z-b.z);
 	return r;
 }
 

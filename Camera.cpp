@@ -8,11 +8,17 @@
  * @param zFar the z far clipping */
 Camera::Camera(float x, float y, float z, float aspect,
 		float fov, float zNear, float zFar) {
-		pos.x = x;
-		pos.y = y;
-		pos.z = z;
+	pos.x = x;
+	pos.y = y;
+	pos.z = z;
 
-		projMat = perspective(aspect, fov, zNear, zFar);
+	projMat = perspective(aspect, fov, zNear, zFar);
+
+	a = aspect;
+	f = fov;
+	zN = zNear;
+	zF = zFar;
+
 }
 
 /* Default constructor, uses default values for projection
@@ -27,6 +33,11 @@ Camera::Camera(float x, float y, float z, float aspect) {
 	pos.z = z;
 
 	projMat = perspective(aspect, 20.f, 0.1f, 1000.f);
+
+	a = aspect;
+	f = 20.f;
+	zN = 0.1f;
+	zF = 1000.f;
 }
 
 /* Default constructor - create camera w/o any projection

@@ -9,6 +9,11 @@ class Camera {
 
 		Mat4 projMat;
 
+		float a;
+		float f;
+		float zN;
+		float zF;
+
 		/* Default constructor
 		 * @params x,y,z position of our camera
 		 * @param aspect the screen aspect ratio

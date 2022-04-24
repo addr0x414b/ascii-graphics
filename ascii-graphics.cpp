@@ -19,17 +19,23 @@ int main() {
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
-	Mesh c("monkey.obj");
+	Vert a(-0.5f, 0.5f, -4.f);
+	Vert b(0.5, 0.5f, -4.f);
+	Vert c(0.0f, -0.5f, -20.f);
+	Trig t(a, b, c, 0.0f, 0.0f, 1.0f);
+	Mesh test;
+	test.trigs = {t};
 
-	c.translate(0.0f, 0.0f, -5.f);
-	//c.rotate(0.0f, 1.0f, 0.0f);
+	Mesh monkey("monkey.obj");
+	monkey.translate(0.0f, 0.0f, -5.f);
 
 	while (1) {
 		screen.start();
 
-		c.rotate(0.0f, 1.0f*screen.deltaTime, 0.0f);
+		//screen.shadeMesh(test);
+		monkey.rotate(0.0f, 1.0f*screen.deltaTime, 0.0f);
+		screen.shadeMesh(monkey);
 
-		screen.shadeMesh(c);
 		screen.print();
 		screen.clear();
 	}
