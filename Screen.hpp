@@ -17,6 +17,7 @@ class Screen {
 		std::vector<std::vector<char>> buffer;
 		std::vector<std::vector<float>> zBuffer;
 
+		int renderMode; // 0 to disable zBuffer, 1 to enable zBuffer;
 		Vert zCross; // Our cross product for zBuffer calculation
 		Vert zVert; // Our vert for interpolating Z for pixel
 

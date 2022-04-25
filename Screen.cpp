@@ -21,6 +21,7 @@ Screen::Screen(int w, int h, Camera& c, LightD l) {
 	zBuffer.resize(height, std::vector<float>(width, 100000.f));
 	lastTime = std::chrono::steady_clock::now();
 	currTime = std::chrono::steady_clock::now();
+	renderMode = 1;
 }
 
 // Calculate deltaTime and FPS
@@ -58,12 +59,16 @@ void Screen::clear() {
  * @param c the character we draw to the buffer */
 void Screen::drawToBuffer(float x, float y, char c) {
 	if (x < width && y < height && x >= 0 && y >= 0) {
-		float z = calcZ(x, y, zCross, zVert);
 		x = round(x);
 		y = round(y);
-		if(checkZB(x, y, z)) {
+		if (renderMode == 0) { // Z buffer disabled
 			buffer[y][x] = c;
-			zBuffer[y][x] = z;
+		} else if (renderMode == 1) {
+			float z = calcZ(x, y, zCross, zVert);
+			if(checkZB(x, y, z)) {
+				buffer[y][x] = c;
+				zBuffer[y][x] = z;
+			}
 		}
 	}
 }
@@ -144,6 +149,10 @@ void Screen::drawMesh(Mesh m, char c) {
 			project(trig, camera.projMat);
 
 			centerFlipY(trig);
+			Vert v1 = direc(trig.verts[1], trig.verts[0]);
+			Vert v2 = direc(trig.verts[2], trig.verts[0]);
+			zCross = cross(v1, v2);
+			zVert = trig.verts[0];
 
 			drawTrig(trig, c);
 		}
@@ -158,6 +167,10 @@ void Screen::drawMeshWire(Mesh m, char c) {
 		project(trig, camera.projMat);
 
 		centerFlipY(trig);
+		Vert v1 = direc(trig.verts[1], trig.verts[0]);
+		Vert v2 = direc(trig.verts[2], trig.verts[0]);
+		zCross = cross(v1, v2);
+		zVert = trig.verts[0];
 		drawTrig(trig, c);
 	}
 }
@@ -171,6 +184,10 @@ void Screen::fillMesh(Mesh m, char c) {
 			project(trig, camera.projMat);
 
 			centerFlipY(trig);
+			Vert v1 = direc(trig.verts[1], trig.verts[0]);
+			Vert v2 = direc(trig.verts[2], trig.verts[0]);
+			zCross = cross(v1, v2);
+			zVert = trig.verts[0];
 
 			std::sort(trig.verts, trig.verts + 3,
 					[](Vert const& a, Vert const& b) -> bool {
