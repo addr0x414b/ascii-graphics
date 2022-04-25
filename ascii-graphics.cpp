@@ -27,13 +27,14 @@ int main() {
 	test.trigs = {t};
 
 	Mesh monkey("monkey.obj");
-	monkey.translate(0.0f, 0.0f, -5.f);
+	monkey.translate(0.0f, 0.0f, -4.f);
 
 	while (1) {
 		screen.start();
 
 		//screen.shadeMesh(test);
-		monkey.rotate(0.0f, 1.0f*screen.deltaTime, 0.0f);
+		monkey.rotate(0.0f, 1.0f*screen.deltaTime, -1.5f*screen.deltaTime);
+
 		screen.shadeMesh(monkey);
 
 		screen.print();

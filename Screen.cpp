@@ -59,7 +59,6 @@ void Screen::clear() {
 void Screen::drawToBuffer(float x, float y, char c) {
 	if (x < width && y < height && x >= 0 && y >= 0) {
 		float z = calcZ(x, y, zCross, zVert);
-		//std::cout << z << " ";
 		x = round(x);
 		y = round(y);
 		if(checkZB(x, y, z)) {
@@ -117,7 +116,6 @@ void Screen::drawLine(float x1, float y1, float x2, float y2, char c) {
 			drawToBuffer(x, y, c);
 		}
 	}
-	//std::cout << "\n";
 }
 /* Draw a line to the buffer using verts
  * @param a our first vertex
@@ -269,19 +267,12 @@ void Screen::shadeMesh(Mesh m) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
 
-
-
 			centerFlipY(trig);
+
 			Vert v1 = direc(trig.verts[1], trig.verts[0]);
 			Vert v2 = direc(trig.verts[2], trig.verts[0]);
 			zCross = cross(v1, v2);
 			zVert = trig.verts[0];
-			//std::cout << trig.verts[0].x << ", " << trig.verts[0].y << ", " << trig.verts[0].z << std::endl;
-			//std::cout << trig.verts[1].x << ", " << trig.verts[1].y << ", " << trig.verts[1].z << std::endl;
-			//std::cout << trig.verts[2].x << ", " << trig.verts[2].y << ", " << trig.verts[2].z << std::endl;
-
-			//std::cout << v1.x << ", " << v1.y << ", " << v1.z << std::endl;
-			//std::exit(1);
 
 			float shade = round((abs(dot(trig.fNormal, light.direction)) * 8)) - 1;
 
