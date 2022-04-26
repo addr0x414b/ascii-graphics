@@ -89,7 +89,10 @@ void Mesh::rotate(float x, float y, float z) {
 	Mat4 yMat = ::rotY(y);
 	Mat4 zMat = ::rotZ(z);
 
-	//unTranslate();
+	unTranslate();
+	unRotateZ();
+	unRotateX();
+	unRotateY();
 	for (auto &trig : trigs) {
 		trig.verts[0] = mult4(trig.verts[0], yMat);
 		trig.verts[1] = mult4(trig.verts[1], yMat);
@@ -106,16 +109,19 @@ void Mesh::rotate(float x, float y, float z) {
 		trig.verts[2] = mult4(trig.verts[2], zMat);
 		trig.fNormal = mult4(trig.fNormal, zMat);
 	}
-	//staticTranslate(transAmt.x, transAmt.y, transAmt.z);
+	staticTranslate(transAmt.x, transAmt.y, transAmt.z);
+	rotAmt.x = x;
+	rotAmt.y = y;
+	rotAmt.z = z;
 
 }
 
 /* Translate the mesh
  * @params x,y,z amount to translate in the x,y,z axis */
 void Mesh::translate(float x, float y, float z) {
-	//transAmt.x += x;
-	//transAmt.y += y;
-	//transAmt.z += z;
+	transAmt.x += x;
+	transAmt.y += y;
+	transAmt.z += z;
 	for (auto &trig : trigs) {
 		trig.verts[0].x += x;
 		trig.verts[0].y += y;
@@ -155,6 +161,7 @@ void Mesh::staticTranslate(float x, float y, float z) {
 /* Scale the mesh
  * @params x,y,z amount to scale in the x,y,z axis */
 void Mesh::scale(float x, float y, float z) {
+	unTranslate();
 	for (auto &trig : trigs) {
 		trig.verts[0].x *= x;
 		trig.verts[0].y *= y;
@@ -182,6 +189,7 @@ void Mesh::scale(float x, float y, float z) {
 		trig.fNormal.y /= l;
 		trig.fNormal.z /= l;*/
 	}
+	staticTranslate(transAmt.x, transAmt.y, transAmt.z);
 }
 
 /* Undo rotation on the X axis */
@@ -196,6 +204,19 @@ void Mesh::unRotateX() {
 		trig.fNormal = mult4(trig.fNormal, m);
 	}
 	rotAmt.x = 0.0f;
+}
+
+/* Undo rotation on the Y axis */
+void Mesh::unRotateY() {
+	Mat4 m = ::rotY(-rotAmt.y);
+	for (auto &trig : trigs) {
+		trig.verts[0] = mult4(trig.verts[0], m);
+		trig.verts[1] = mult4(trig.verts[1], m);
+		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.fNormal = mult4(trig.fNormal, m);
+	}
+	rotAmt.y = 0.0f;
+
 }
 
 /* Undo rotation on the Z axis */

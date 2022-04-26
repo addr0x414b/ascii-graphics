@@ -19,14 +19,16 @@ int main() {
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
+	Mesh cube("skull.obj");
+	cube.translate(0.0f, 0.0f, -9.f);
+	cube.scale(1.0f, 1.0f, 1.0f);
+
 	float deg = 0.1f;
 	while (1) {
 		screen.start();
 
-		Cube cube;
-		cube.rotate(0.0f, deg, deg*0.5f);
-		cube.translate(0.0f, 0.0f, -4.f);
-		deg += 0.01f;
+		cube.rotate(deg, deg, deg);
+		deg += 0.02f;
 
 		screen.shadeMesh(cube);
 

@@ -63,6 +63,9 @@ class Mesh {
 		/* Undo rotation on the Z axis */
 		void unRotateZ();
 
+		/* Undo rotation on the Y axis */
+		void unRotateY();
+
 		/* Undo rotation on the X axis */
 		void unRotateX();
 
