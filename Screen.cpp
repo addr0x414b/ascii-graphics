@@ -42,7 +42,9 @@ void Screen::print() {
 		std::cout << "\n";
 	}
 	//usleep(8500);
-	usleep(10500);
+	//usleep(9000);
+	usleep(11000);
+	//usleep(15000);
 }
 
 // Clear the contents of the screen buffer
@@ -274,7 +276,6 @@ void Screen::fillFt(Trig t, char c) {
 		}
 		drawLine(x1, y, x2, y, c);
 	}
-	//std::exit(0);
 }
 
 /* Shade in the mesh based on the light
@@ -282,6 +283,7 @@ void Screen::fillFt(Trig t, char c) {
 void Screen::shadeMesh(Mesh m) {
 	for (auto &trig : m.trigs) {
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
+
 			project(trig, camera.projMat);
 
 			centerFlipY(trig);
@@ -330,14 +332,32 @@ void Screen::shadeMesh(Mesh m) {
  * to make the +y direction go up instead of down
  * @param t the triangle */
 void Screen::centerFlipY(Trig& t) {
-	t.verts[0].y /= -1;
-	t.verts[1].y /= -1;
-	t.verts[2].y /= -1;
+
+	//t.verts[0].y = (-t.verts[0].y)*(1.f/camera.a)/2.f;
+	//t.verts[1].y = (-t.verts[1].y)*(1.f/camera.a)/2.f;
+	//t.verts[2].y = (-t.verts[2].y)*(1.f/camera.a)/2.f;
+
+	t.verts[0].y *= -1.f;
+	t.verts[1].y *= -1.f;
+	t.verts[2].y *= -1.f;
+
+	t.verts[0].x *= camera.a*2.5;
+	t.verts[1].x *= camera.a*2.5;
+	t.verts[2].x *= camera.a*2.5f;
+	/*
+	t.verts[0].x += 1.0f;
+	t.verts[0].y += 1.0f;
+	t.verts[1].x += 1.0f;
+	t.verts[1].y += 1.0f;
+	t.verts[2].x += 1.0f;
+	t.verts[2].y += 1.0f;*/
 
 	t.verts[0].x += (float)width/2;
-	t.verts[0].y += (float)height/2;
+	t.verts[0].y += (float)height/2.f;
 	t.verts[1].x += (float)width/2;
-	t.verts[1].y += (float)height/2;
+	t.verts[1].y += (float)height/2.f;
 	t.verts[2].x += (float)width/2;
-	t.verts[2].y += (float)height/2;
+	t.verts[2].y += (float)height/2.f;
+
+
 }

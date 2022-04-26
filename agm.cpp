@@ -2,6 +2,9 @@
 #include <iostream>
 #include <math.h>
 
+Mat4::Mat4() {
+	m.resize(4, std::vector<float>(4, 0.0f));
+}
 
 /* Creates a Mat4 with the perspective projection matrix values applied
  * @param aspect our screen aspect ratio
@@ -12,11 +15,28 @@
 Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 	Mat4 m;
 
-	m.m[0][0] = 1.0f / (aspect * tan((fov * (3.141592f / 180.f))/2.f));
-	m.m[1][1] = 1.0f / tan((fov * (3.141592f / 180.f)/2.f));
+	float fovRad = (fov/2.f) * (3.141592f / 180.f);
+
+	/*
+	m.m[0][0] = 1.f / tanf(fovRad) / aspect;
+	m.m[1][1] = 1.f / tanf(fovRad);
+	m.m[2][2] = zFar / (zFar - zNear);
+	m.m[3][2] = (-zFar * zNear) / (zFar - zNear);
+	m.m[2][3] = 1.0f;*/
+
+
+	m.m[0][0] = (1.f / (tan(fovRad))) / aspect;
+	m.m[1][1] = 1.f / tanf(fovRad);
+	m.m[2][2] = ((-2.f * zNear) / (zFar - zNear)) - 1.f;
+	m.m[3][2] = (-zNear * zFar) / (zFar - zNear);
+	m.m[2][3] = -1.0f;
+
+	/*
+	m.m[0][0] = 1.0f / (tanf((fov * (3.141592f / 180.f))/2.f)) / aspect;
+	m.m[1][1] = 1.0f / tanf((fov * (3.141592f / 180.f)/2.f));
 	m.m[2][2] = - ((zFar + zNear) / (zFar - zNear));
 	m.m[2][3] = - ((2 * zFar * zNear) / (zFar - zNear));
-	m.m[3][2] = -1.f;
+	m.m[3][2] = -1.f;*/
 
 	return m;
 }
@@ -77,7 +97,7 @@ void Mesh::rotate(float x, float y, float z) {
 	Mat4 yMat = ::rotY(y);
 	Mat4 zMat = ::rotZ(z);
 
-	unTranslate();
+	//unTranslate();
 	for (auto &trig : trigs) {
 		trig.verts[0] = mult4(trig.verts[0], yMat);
 		trig.verts[1] = mult4(trig.verts[1], yMat);
@@ -94,16 +114,16 @@ void Mesh::rotate(float x, float y, float z) {
 		trig.verts[2] = mult4(trig.verts[2], zMat);
 		trig.fNormal = mult4(trig.fNormal, zMat);
 	}
-	staticTranslate(transAmt.x, transAmt.y, transAmt.z);
+	//staticTranslate(transAmt.x, transAmt.y, transAmt.z);
 
 }
 
 /* Translate the mesh
  * @params x,y,z amount to translate in the x,y,z axis */
 void Mesh::translate(float x, float y, float z) {
-	transAmt.x += x;
-	transAmt.y += y;
-	transAmt.z += z;
+	//transAmt.x += x;
+	//transAmt.y += y;
+	//transAmt.z += z;
 	for (auto &trig : trigs) {
 		trig.verts[0].x += x;
 		trig.verts[0].y += y;
@@ -225,7 +245,7 @@ void Mesh::unTranslate() {
  * @param v our vertex
  * @param m our 4x4 matrix
  * @return product of multiplcation */
-Vert mult4(Vert v, Mat4 m) {
+Vert mult4(Vert v, Mat4& m) {
 
 	Vert a;
 
@@ -234,10 +254,16 @@ Vert mult4(Vert v, Mat4 m) {
 	float ty = v.y;
 	float tz = v.z;
 
+	/*
 	a.x = tx * m.m[0][0] + ty * m.m[1][0] + tz * m.m[2][0] + m.m[3][0];
 	a.y = tx * m.m[0][1] + ty * m.m[1][1] + tz * m.m[2][1] + m.m[3][1];
 	a.z = tx * m.m[0][2] + ty * m.m[1][2] + tz * m.m[2][2] + m.m[3][2];
-	float w = tx * m.m[0][3] + ty * m.m[1][3] + tz * m.m[2][3] + m.m[3][3];
+	float w = tx * m.m[0][3] + ty * m.m[1][3] + tz * m.m[2][3] + m.m[3][3];*/
+
+	a.x = (tx * m.m[0][0]) + (ty * m.m[0][1]) + (tz * m.m[0][2]) + m.m[0][3];
+	a.y = tx * m.m[1][0] + ty * m.m[1][1] + tz * m.m[1][2] + m.m[1][3];
+	a.z = tx * m.m[2][0] + ty * m.m[2][1] + tz * m.m[2][2] + m.m[2][3];
+	float w = tx * m.m[3][0] + ty * m.m[3][1] + tz * m.m[3][2] + m.m[3][3];
 
 	if (w != 0.0f) {
 		a.x /= w;
@@ -275,9 +301,9 @@ Vert cross(Vert a, Vert b) {
  * @param t the triangle
  * @param m the perspective matrix */
 void project(Trig& t, Mat4 m) {
-		t.verts[0] = mult4(t.verts[0], m);
-		t.verts[1] = mult4(t.verts[1], m);
-		t.verts[2] = mult4(t.verts[2], m);
+	t.verts[0] = mult4(t.verts[0], m);
+	t.verts[1] = mult4(t.verts[1], m);
+	t.verts[2] = mult4(t.verts[2], m);
 }
 
 /* Calculate the Z value from x,y using cross and vert of equation of plane

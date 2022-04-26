@@ -8,7 +8,9 @@
 // 4x4 matrix
 class Mat4 {
 	public:
-		float m[4][4] = { 0 };
+		//float m[4][4] = { 0.0f };
+		std::vector<std::vector<float>> m;
+		Mat4();
 };
 
 
@@ -39,7 +41,7 @@ Mat4 rotX(float degrees);
  * @param v our vertex
  * @param m our 4x4 matrix
  * @return product of multiplcation */
-Vert mult4(Vert v, Mat4 m);
+Vert mult4(Vert v, Mat4& m);
 
 /* Calculate the dot product between two vertices
  * @params a,b vertices
