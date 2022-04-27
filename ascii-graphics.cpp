@@ -9,8 +9,8 @@
 #include <ctime>
 
 // Global variables
-int gScreenWidth = 220*2.f;
-int gScreenHeight = 50*2.1f;
+int gScreenWidth = 220;
+int gScreenHeight = 50;
 float gAspect = (float)gScreenWidth / (float)gScreenHeight;
 
 int main() {
@@ -19,22 +19,16 @@ int main() {
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
-	//Cube monkey;
-	//monkey.scale(2.5f, 2.5f, 2.5f);
-	//monkey.translate(0.0f, 0.0f, -7.f);
-
 	float deg = 0.1f;
 	while (1) {
 		screen.start();
 
-		Mesh monkey("monkey.obj");
-		//monkey.scale(2.0f, 2.0f, 2.0f);
-		monkey.rotate(0.0f, deg, 0.0f);
-		monkey.translate(0.0f, 0.0f, -1.7f);
-		deg += 0.015f;
-		//monkey.rotate(0.0f, 1.0f*screen.deltaTime, 0.0f);
+		Cube cube;
+		cube.rotate(0.0f, deg, deg*0.5f);
+		cube.translate(0.0f, 0.0f, -4.f);
+		deg += 0.01f;
 
-		screen.shadeMesh(monkey);
+		screen.shadeMesh(cube);
 
 		screen.print();
 		screen.clear();

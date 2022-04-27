@@ -333,10 +333,6 @@ void Screen::shadeMesh(Mesh m) {
  * @param t the triangle */
 void Screen::centerFlipY(Trig& t) {
 
-	//t.verts[0].y = (-t.verts[0].y)*(1.f/camera.a)/2.f;
-	//t.verts[1].y = (-t.verts[1].y)*(1.f/camera.a)/2.f;
-	//t.verts[2].y = (-t.verts[2].y)*(1.f/camera.a)/2.f;
-
 	t.verts[0].y *= -1.f;
 	t.verts[1].y *= -1.f;
 	t.verts[2].y *= -1.f;
@@ -344,13 +340,6 @@ void Screen::centerFlipY(Trig& t) {
 	t.verts[0].x *= camera.a*2.5;
 	t.verts[1].x *= camera.a*2.5;
 	t.verts[2].x *= camera.a*2.5f;
-	/*
-	t.verts[0].x += 1.0f;
-	t.verts[0].y += 1.0f;
-	t.verts[1].x += 1.0f;
-	t.verts[1].y += 1.0f;
-	t.verts[2].x += 1.0f;
-	t.verts[2].y += 1.0f;*/
 
 	t.verts[0].x += (float)width/2;
 	t.verts[0].y += (float)height/2.f;

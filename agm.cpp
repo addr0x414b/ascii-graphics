@@ -17,14 +17,6 @@ Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 
 	float fovRad = (fov/2.f) * (3.141592f / 180.f);
 
-	/*
-	m.m[0][0] = 1.f / tanf(fovRad) / aspect;
-	m.m[1][1] = 1.f / tanf(fovRad);
-	m.m[2][2] = zFar / (zFar - zNear);
-	m.m[3][2] = (-zFar * zNear) / (zFar - zNear);
-	m.m[2][3] = 1.0f;*/
-
-
 	m.m[0][0] = (1.f / (tan(fovRad))) / aspect;
 	m.m[1][1] = 1.f / tanf(fovRad);
 	m.m[2][2] = ((-2.f * zNear) / (zFar - zNear)) - 1.f;
@@ -253,12 +245,6 @@ Vert mult4(Vert v, Mat4& m) {
 	float tx = v.x;
 	float ty = v.y;
 	float tz = v.z;
-
-	/*
-	a.x = tx * m.m[0][0] + ty * m.m[1][0] + tz * m.m[2][0] + m.m[3][0];
-	a.y = tx * m.m[0][1] + ty * m.m[1][1] + tz * m.m[2][1] + m.m[3][1];
-	a.z = tx * m.m[0][2] + ty * m.m[1][2] + tz * m.m[2][2] + m.m[3][2];
-	float w = tx * m.m[0][3] + ty * m.m[1][3] + tz * m.m[2][3] + m.m[3][3];*/
 
 	a.x = (tx * m.m[0][0]) + (ty * m.m[0][1]) + (tz * m.m[0][2]) + m.m[0][3];
 	a.y = tx * m.m[1][0] + ty * m.m[1][1] + tz * m.m[1][2] + m.m[1][3];
