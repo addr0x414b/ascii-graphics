@@ -19,18 +19,21 @@ int main() {
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
-	Mesh cube("skull.obj");
-	cube.translate(0.0f, 0.0f, -9.f);
-	cube.scale(1.0f, 1.0f, 1.0f);
+	Vert p1(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f);
+	Vert p2(0.5f, -0.5f, 0.0f, -1.0f, 1.0f, 1.0f);
+	Vert p3(0.0f, 0.5f, 0.0f, 1.0f, -1.0f, 1.0f);
+	Trig t1(p1, p2, p3, 0.0f, 0.0f, 1.0f);
+	Mesh t;
+	t.trigs = {t1};
+
+	t.translate(0.0f, 0.0f, -2.f);
 
 	float deg = 0.1f;
 	while (1) {
 		screen.start();
 
-		cube.rotate(deg, deg, deg);
-		deg += 0.02f;
 
-		screen.shadeMesh(cube);
+		screen.shadeMeshSmooth(t);
 
 		screen.print();
 		screen.clear();

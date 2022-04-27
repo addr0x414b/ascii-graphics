@@ -7,12 +7,22 @@
 class Vert {
 	public:
 		float x, y, z; // Our points to the vertex
+		float xn, yn, zn; // Vertex normal
 
 		/* Default constructor - create a vertex
 		 * @param xx our x position
 		 * @param yy our y position
 		 * @param zz our z position */
 		Vert(float xx, float yy, float zz);
+
+		/* Default constructor - create a vertex
+		 * @param xx our x position
+		 * @param yy our y position
+		 * @param zz our z position
+		 * @param nx our x normal location
+		 * @param ny our y normal location
+		 * @param nz our z normal location */
+		Vert(float xx, float yy, float zz, float nx, float ny, float nz);
 
 		/* Default constructor - create a vertex
 		 * Default values: x,y,z = 0 */

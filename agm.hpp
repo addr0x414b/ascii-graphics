@@ -69,3 +69,11 @@ float calcZ(float x, float y, Vert c, Vert v);
  * @param m the perspective matrix */
 void project(Trig& t, Mat4 m);
 
+/* Calculate the bary coordinates given 3 points of a triangle and and x and y
+ * inside of the triangle
+ * @params p1,p2,p3 vertices of the triangle
+ * @params x,y current point within the triangle
+ * @params w1,w2,w3 store the bary outputs */
+void calcBary(Vert p1, Vert p2, Vert p3, int x, int y, float& w1, float& w2,
+		float& w3);
+

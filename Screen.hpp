@@ -21,6 +21,14 @@ class Screen {
 		Vert zCross; // Our cross product for zBuffer calculation
 		Vert zVert; // Our vert for interpolating Z for pixel
 
+		Vert p1N; // Current triangle vertex normals. Used for smooth shading
+		Vert p2N; // Only used when we call the shadeMeshSmooth function
+		Vert p3N;
+
+		Vert tP1; // Our current triangle points. Used for calculating bary coords
+		Vert tP2;
+		Vert tP3;
+
 		// Screen width and height
 		int width, height;
 
@@ -97,6 +105,10 @@ class Screen {
 		/* Shade in the mesh based on the light
 		 * @param m the mesh */
 		void shadeMesh(Mesh m);
+
+		/* Shade in the mesh smooth based on the light
+		 * @param m the mesh */
+		void shadeMeshSmooth(Mesh m);
 
 		/* Fill a flat bottom triangle
 		 * @param t the triangle

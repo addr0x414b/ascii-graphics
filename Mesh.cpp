@@ -15,6 +15,22 @@ Vert::Vert(float xx, float yy, float zz) {
 }
 
 /* Default constructor - create a vertex
+ * @param xx our x position
+ * @param yy our y position
+ * @param zz our z position
+ * @param nx our x normal location
+ * @param ny our y normal location
+ * @param nz our z normal location */
+Vert::Vert(float xx, float yy, float zz, float nx, float ny, float nz) {
+	x = xx;
+	y = yy;
+	z = zz;
+	xn = nx;
+	yn = ny;
+	zn = nz;
+}
+
+/* Default constructor - create a vertex
  * Default values: x,y,z = 0 */
 Vert::Vert() {
 	x = 0.0f;

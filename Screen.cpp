@@ -68,8 +68,26 @@ void Screen::drawToBuffer(float x, float y, char c) {
 		} else if (renderMode == 1) {
 			float z = calcZ(x, y, zCross, zVert);
 			if(checkZB(x, y, z)) {
-				buffer[y][x] = c;
 				zBuffer[y][x] = z;
+				if (c == 'S') { // If we are smooth shading
+					float w1, w2, w3;
+					calcBary(tP1, tP2, tP3, x, y, w1, w2, w3);
+					float xx = ((w1 * p1N.x) + (w2 * p2N.x) + (w3 * p3N.x));
+					float yy = ((w1 * p1N.y) + (w2 * p2N.y) + (w3 * p3N.y));
+					float zz = ((w1 * p1N.z) + (w2 * p2N.z) + (w3 * p3N.z));
+					float l = sqrtf(xx*xx + yy*yy + zz*zz);
+					xx /= l;
+					yy /= l;
+					zz /= l;
+					Vert pNormal(xx, yy, zz);
+
+					float shade = round((abs(dot(pNormal, light.direction)) * 8)) - 1;
+					if (shade <= 0) {
+						shade = 0;
+					}
+					c = shadeValues[shade];
+				}
+				buffer[y][x] = c;
 			}
 		}
 	}
@@ -323,6 +341,57 @@ void Screen::shadeMesh(Mesh m) {
 				fillFb(fb, c);
 			}
 			drawTrig(trig, c);
+		}
+	}
+}
+
+/* Shade in the mesh smooth based on the light
+ * @param m the mesh */
+void Screen::shadeMeshSmooth(Mesh m) {
+	for (auto &trig : m.trigs) {
+		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
+
+			project(trig, camera.projMat);
+
+			centerFlipY(trig);
+
+			Vert v1 = direc(trig.verts[1], trig.verts[0]);
+			Vert v2 = direc(trig.verts[2], trig.verts[0]);
+			zCross = cross(v1, v2);
+			zVert = trig.verts[0];
+
+			Vert p1(trig.verts[0].xn, trig.verts[0].yn, trig.verts[0].zn);
+			Vert p2(trig.verts[1].xn, trig.verts[1].yn, trig.verts[1].zn);
+			Vert p3(trig.verts[2].xn, trig.verts[2].yn, trig.verts[2].zn);
+			p1N = p1;
+			p2N = p2;
+			p3N = p3;
+			tP1 = trig.verts[0];
+			tP2 = trig.verts[1];
+			tP3 = trig.verts[2];
+
+			std::sort(trig.verts, trig.verts + 3,
+					[](Vert const& a, Vert const& b) -> bool {
+					return a.y < b.y;
+					});
+
+			if (trig.verts[1].y == trig.verts[2].y) {
+				fillFb(trig, 'S');
+			} else if (trig.verts[0].y == trig.verts[1].y) {
+				fillFt(trig, 'S');
+			} else {
+				float m1 = (trig.verts[0].y - trig.verts[2].y) /
+					(trig.verts[0].x - trig.verts[2].x);
+
+				float b1 = trig.verts[0].y - (m1 * trig.verts[0].x);
+				Vert n((trig.verts[1].y-b1)/m1, trig.verts[1].y, 0.0f);
+				n.z = calcZ(n.x, n.y, zCross, zVert);
+				Trig fb(trig.verts[0], n, trig.verts[1], 0.0f, 0.0f, 0.0f);
+				Trig ft(n, trig.verts[1], trig.verts[2], 0.0f, 0.0f, 0.0f);
+				fillFt(ft, 'S');
+				fillFb(fb, 'S');
+			}
+			drawTrig(trig, 'S');
 		}
 	}
 }

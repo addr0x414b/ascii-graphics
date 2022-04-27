@@ -278,6 +278,10 @@ Vert mult4(Vert v, Mat4& m) {
 		a.z /= w;
 	}
 
+	a.xn = v.xn;
+	a.yn = v.yn;
+	a.zn = v.zn;
+
 	return a;
 }
 
@@ -322,4 +326,18 @@ float calcZ(float x, float y, Vert c, Vert v) {
 	float z = ((c.x*x + c.y*y - k) / (-c.z));
 	//float z = (1.f/c.z)*(c.x*v.x + c.y*v.y + c.z*v.z - c.x*x - c.y*y);
 	return z;
+}
+
+/* Calculate the bary coordinates given 3 points of a triangle and and x and y
+ * inside of the triangle
+ * @params p1,p2,p3 vertices of the triangle
+ * @params x,y current point within the triangle
+ * @params w1,w2,w3 store the bary outputs */
+void calcBary(Vert p1, Vert p2, Vert p3, int x, int y, float& w1, float& w2,
+		float& w3) {
+	w1 = (((p2.y - p3.y) * (x - p3.x)) + (p3.x - p2.x) * (y - p3.y)) /
+		(((p2.y - p3.y) * (p1.x - p3.x)) + ((p3.x - p2.x) * (p1.y - p3.y)));
+	w2 = (((p3.y - p1.y) * (x - p3.x)) + ((p1.x - p3.x) * (y - p3.y))) /
+		(((p2.y - p3.y) * (p1.x - p3.x)) + ((p3.x - p2.x) * (p1.y - p3.y)));
+	w3 = 1 - w1 - w2;
 }
