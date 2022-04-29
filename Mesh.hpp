@@ -33,6 +33,7 @@ class Vert {
 class Trig {
 	public:
 		Vert verts[3];
+		Vert norms[3];
 		Vert fNormal; // Face normal vector
 
 		/* Default constructor - create a triangle
@@ -54,6 +55,11 @@ class Mesh {
 
 		/* Default constructor - load an obj file mesh */
 		Mesh(std::string objFile);
+
+		/* Default constructor - load an obj file mesh thats smoothed
+		 * @param s any random number, doesn't matter - doesn't do anything
+		 * @param objFile path to file */
+		Mesh(int s, std::string objFile);
 
 		/* Translate the mesh
 		 * @params x,y,z amount to translate in the x,y,z axis */

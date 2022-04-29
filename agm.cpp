@@ -97,16 +97,25 @@ void Mesh::rotate(float x, float y, float z) {
 		trig.verts[0] = mult4(trig.verts[0], yMat);
 		trig.verts[1] = mult4(trig.verts[1], yMat);
 		trig.verts[2] = mult4(trig.verts[2], yMat);
+		trig.norms[0] = mult4(trig.norms[0], yMat);
+		trig.norms[1] = mult4(trig.norms[1], yMat);
+		trig.norms[2] = mult4(trig.norms[2], yMat);
 		trig.fNormal = mult4(trig.fNormal, yMat);
 
 		trig.verts[0] = mult4(trig.verts[0], xMat);
 		trig.verts[1] = mult4(trig.verts[1], xMat);
 		trig.verts[2] = mult4(trig.verts[2], xMat);
+		trig.norms[0] = mult4(trig.norms[0], xMat);
+		trig.norms[1] = mult4(trig.norms[1], xMat);
+		trig.norms[2] = mult4(trig.norms[2], xMat);
 		trig.fNormal = mult4(trig.fNormal, xMat);
 
 		trig.verts[0] = mult4(trig.verts[0], zMat);
 		trig.verts[1] = mult4(trig.verts[1], zMat);
 		trig.verts[2] = mult4(trig.verts[2], zMat);
+		trig.norms[0] = mult4(trig.norms[0], zMat);
+		trig.norms[1] = mult4(trig.norms[1], zMat);
+		trig.norms[2] = mult4(trig.norms[2], zMat);
 		trig.fNormal = mult4(trig.fNormal, zMat);
 	}
 	staticTranslate(transAmt.x, transAmt.y, transAmt.z);
@@ -201,6 +210,9 @@ void Mesh::unRotateX() {
 		trig.verts[0] = mult4(trig.verts[0], m);
 		trig.verts[1] = mult4(trig.verts[1], m);
 		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.norms[0] = mult4(trig.norms[0], m);
+		trig.norms[1] = mult4(trig.norms[1], m);
+		trig.norms[2] = mult4(trig.norms[2], m);
 		trig.fNormal = mult4(trig.fNormal, m);
 	}
 	rotAmt.x = 0.0f;
@@ -213,6 +225,9 @@ void Mesh::unRotateY() {
 		trig.verts[0] = mult4(trig.verts[0], m);
 		trig.verts[1] = mult4(trig.verts[1], m);
 		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.norms[0] = mult4(trig.norms[0], m);
+		trig.norms[1] = mult4(trig.norms[1], m);
+		trig.norms[2] = mult4(trig.norms[2], m);
 		trig.fNormal = mult4(trig.fNormal, m);
 	}
 	rotAmt.y = 0.0f;
@@ -227,6 +242,9 @@ void Mesh::unRotateZ() {
 		trig.verts[0] = mult4(trig.verts[0], m);
 		trig.verts[1] = mult4(trig.verts[1], m);
 		trig.verts[2] = mult4(trig.verts[2], m);
+		trig.norms[0] = mult4(trig.norms[0], m);
+		trig.norms[1] = mult4(trig.norms[1], m);
+		trig.norms[2] = mult4(trig.norms[2], m);
 		trig.fNormal = mult4(trig.fNormal, m);
 	}
 	rotAmt.z = 0.0f;

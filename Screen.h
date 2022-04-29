@@ -9,6 +9,8 @@ class Screen {
 		// 2D Vector that stores the 'pixels' we print
 		std::vector<std::vector<char>> buffer;
 
+		int smoothShading;
+
 		// Screen width and height
 		int width, height;
 

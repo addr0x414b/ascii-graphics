@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <math.h>
 
 /* Default constructor
  * @param xx our x position
@@ -12,6 +13,9 @@ Vert::Vert(float xx, float yy, float zz) {
 	x = xx;
 	y = yy;
 	z = zz;
+	xn = 0.f;
+	yn = 0.f;
+	zn = 0.f;
 }
 
 /* Default constructor - create a vertex
@@ -36,6 +40,9 @@ Vert::Vert() {
 	x = 0.0f;
 	y = 0.0f;
 	z = 0.0f;
+	xn = 0.f;
+	yn = 0.f;
+	zn = 0.f;
 }
 
 /* Default constructor
@@ -46,8 +53,123 @@ Trig::Trig(Vert p1, Vert p2, Vert p3, float x, float y, float z) {
 	verts[1] = p2;
 	verts[2] = p3;
 
+	Vert p1n(p1.xn, p1.yn, p1.zn);
+	Vert p2n(p2.xn, p2.yn, p2.zn);
+	Vert p3n(p3.xn, p3.yn, p3.zn);
+
+	norms[0] = p1n;
+	norms[1] = p2n;
+	norms[2] = p3n;
+
 	Vert n(x, y, z);
 	fNormal = n;
+}
+
+/* Default constructor - load an obj file mesh thats smoothed
+ * @param s any random number, doesn't matter - doesn't do anything
+ * @param objFile path to file */
+Mesh::Mesh(int s, std::string objFile) {
+
+	std::fstream file;
+	std::string index;
+	std::string x;
+	std::string y;
+	std::string z;
+
+	std::string nx, ny, nz;
+
+	std::vector<std::string> vertices;
+	std::vector<std::string> normals;
+
+	file.open(objFile);
+	while(file >> index) {
+		if (index == "v") {
+			file >> x;
+			file >> y;
+			file >> z;
+			vertices.push_back(x + " " + y + " " + z);
+		} else if (index == "vn") {
+			file >> x;
+			file >> y;
+			file >> z;
+			normals.push_back(x + " " + y + " " + z);
+		} else if (index == "f") {
+			file >> x;
+			file >> y;
+			file >> z;
+			std::replace(x.begin(), x.end(), '/', ' ');
+			std::replace(y.begin(), y.end(), '/', ' ');
+			std::replace(z.begin(), z.end(), '/', ' ');
+
+			std::istringstream a(x);
+			std::istringstream b(y);
+			std::istringstream c(z);
+			std::string p1, n1, n2, n3;
+			std::string p2;
+			std::string p3;
+			a >> p1 >> n1;
+			b >> p2 >> n2;
+			c >> p3 >> n3;
+
+			std::istringstream v(vertices[std::stoi(p1)-1]);
+			v >> x;
+			v >> y;
+			v >> z;
+			std::istringstream norm1(normals[std::stoi(n1)-1]);
+			norm1 >> nx;
+			norm1 >> ny;
+			norm1 >> nz;
+			Vert v1(std::stof(x), std::stof(y), std::stof(z),
+					std::stof(nx), std::stof(ny), std::stof(nz));
+
+			std::istringstream vv(vertices[std::stoi(p2)-1]);
+			vv >> x;
+			vv >> y;
+			vv >> z;
+			std::istringstream norm2(normals[std::stoi(n2)-1]);
+			norm2 >> nx;
+			norm2 >> ny;
+			norm2 >> nz;
+			Vert v2(std::stof(x), std::stof(y), std::stof(z),
+					std::stof(nx), std::stof(ny), std::stof(nz));
+
+			std::istringstream vvv(vertices[std::stoi(p3)-1]);
+			vvv >> x;
+			vvv >> y;
+			vvv >> z;
+			std::istringstream norm3(normals[std::stoi(n3)-1]);
+			norm3 >> nx;
+			norm3 >> ny;
+			norm3 >> nz;
+			Vert v3(std::stof(x), std::stof(y), std::stof(z),
+					std::stof(nx), std::stof(ny), std::stof(nz));
+
+			Vert dir1(v2.x-v1.x, v2.y-v1.y, v2.z-v1.z);
+			Vert dir2(v3.x-v1.x, v3.y-v1.y, v3.z-v1.z);
+			Vert cross((dir1.y*dir2.z)-(dir1.z*dir2.y),
+					(dir1.z*dir2.x)-(dir1.x*dir2.z), (dir1.x*dir2.y)-(dir1.y*dir2.x));
+
+			//float l = sqrtf(cross.x*cross.x + cross.y*cross.y + cross.z*cross.z);
+			//cross.x /= l;
+			//cross.y /= l;
+			//cross.z /= l;
+
+			Trig t(v1, v2, v3, cross.x, cross.y, cross.z);
+
+			trigs.push_back(t);
+
+			//std::cout << t.verts[0].x << ", " << t.verts[0].y << ", " << t.verts[0].z << std::endl;
+
+			//std::cout << p1 << " " << p2 << " " << p3 << std::endl;
+			//std::cout << vertices[0] << std::endl;
+			//std::cout << v3.x << std::endl;
+		}
+	}
+
+	std::istringstream v(vertices[0]);
+	v >> x;
+	//std::cout << normals[0] << std::endl;
+
 }
 
 /* Default constructor - load an obj file mesh */

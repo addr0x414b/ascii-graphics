@@ -15,7 +15,7 @@ Screen::Screen(int w, int h, Camera& c, LightD l) {
 	height = h;
 	fillChar = ' ';
 	light = l;
-	shadeValues = ".:*+=%#@";
+	shadeValues = ".:+*=#%@";
 	// Allocate memory to our screen buffer. Fill with empty chars
 	buffer.resize(height, std::vector<char>(width, fillChar));
 	zBuffer.resize(height, std::vector<float>(width, 100000.f));
@@ -360,12 +360,12 @@ void Screen::shadeMeshSmooth(Mesh m) {
 			zCross = cross(v1, v2);
 			zVert = trig.verts[0];
 
-			Vert p1(trig.verts[0].xn, trig.verts[0].yn, trig.verts[0].zn);
-			Vert p2(trig.verts[1].xn, trig.verts[1].yn, trig.verts[1].zn);
-			Vert p3(trig.verts[2].xn, trig.verts[2].yn, trig.verts[2].zn);
-			p1N = p1;
-			p2N = p2;
-			p3N = p3;
+			//Vert p1(trig.verts[0].xn, trig.verts[0].yn, trig.verts[0].zn);
+			//Vert p2(trig.verts[1].xn, trig.verts[1].yn, trig.verts[1].zn);
+			//Vert p3(trig.verts[2].xn, trig.verts[2].yn, trig.verts[2].zn);
+			p1N = trig.norms[0];
+			p2N = trig.norms[1];
+			p3N = trig.norms[2];
 			tP1 = trig.verts[0];
 			tP2 = trig.verts[1];
 			tP3 = trig.verts[2];
