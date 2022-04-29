@@ -84,6 +84,8 @@ void Screen::drawToBuffer(float x, float y, char c) {
 					float shade = round((abs(dot(pNormal, light.direction)) * 8)) - 1;
 					if (shade <= 0) {
 						shade = 0;
+					} else if(shade > 8) {
+						shade = 7;
 					}
 					c = shadeValues[shade];
 				}
@@ -315,6 +317,8 @@ void Screen::shadeMesh(Mesh m) {
 
 			if (shade <= 0) {
 				shade = 0;
+			} else if(shade > 8) {
+				shade = 7;
 			}
 
 			char c = shadeValues[shade];
