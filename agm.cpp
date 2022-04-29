@@ -77,7 +77,7 @@ Mat4 rotZ(float degrees) {
 }
 
 /* Rotate the mesh
- * @params x,y,z amount in each axis */
+ * @params x,y,z: degrees in each axis */
 void Mesh::rotate(float x, float y, float z) {
 	Mat4 xMat = ::rotX(x);
 	Mat4 yMat = ::rotY(y);
@@ -126,7 +126,7 @@ void Mesh::rotate(float x, float y, float z) {
 }
 
 /* Translate the mesh
- * @params x,y,z amount to translate in the x,y,z axis */
+ * @params x,y,z: amount to translate in the x,y,z axis */
 void Mesh::translate(float x, float y, float z) {
 	/* Set the translated amounts. These are used when the mesh is untranslated
 	 * for its local rotations */
@@ -150,7 +150,7 @@ void Mesh::translate(float x, float y, float z) {
 }
 
 /* Translate the mesh statically, as in set the points and that's it
- * @params x,y,z amount to translate in the x,y,z axis */
+ * @params x,y,z: amount to translate in the x,y,z axis */
 void Mesh::staticTranslate(float x, float y, float z) {
 	for (auto &trig : trigs) {
 		trig.verts[0].x += x;
@@ -168,35 +168,21 @@ void Mesh::staticTranslate(float x, float y, float z) {
 }
 
 /* Scale the mesh
- * @params x,y,z amount to scale in the x,y,z axis */
-void Mesh::scale(float x, float y, float z) {
+ * @param amt: the amount to scale in x,y,z */
+void Mesh::scale(float amt) {
 	unTranslate();
 	for (auto &trig : trigs) {
-		trig.verts[0].x *= x;
-		trig.verts[0].y *= y;
-		trig.verts[0].z *= z;
+		trig.verts[0].x *= amt;
+		trig.verts[0].y *= amt;
+		trig.verts[0].z *= amt;
 
-		trig.verts[1].x *= x;
-		trig.verts[1].y *= y;
-		trig.verts[1].z *= z;
+		trig.verts[1].x *= amt;
+		trig.verts[1].y *= amt;
+		trig.verts[1].z *= amt;
 
-		trig.verts[2].x *= x;
-		trig.verts[2].y *= y;
-		trig.verts[2].z *= z;
-
-		// I'm adding this comment to remind me that for uneven scaling (such as
-		// scaling y by 0.5 and x/z by 2) will mess with the normals, thus focing
-		// you multiply by the inverse transpose of the transformation
-		/*trig.fNormal.x *= x;
-		trig.fNormal.y *= y;
-		trig.fNormal.z *= z;
-
-		float l = sqrtf(trig.fNormal.x*trig.fNormal.x + trig.fNormal.y*
-		trig.fNormal.y + trig.fNormal.z*trig.fNormal.z);
-
-		trig.fNormal.x /= l;
-		trig.fNormal.y /= l;
-		trig.fNormal.z /= l;*/
+		trig.verts[2].x *= amt;
+		trig.verts[2].y *= amt;
+		trig.verts[2].z *= amt;
 	}
 	staticTranslate(transAmt.x, transAmt.y, transAmt.z);
 }

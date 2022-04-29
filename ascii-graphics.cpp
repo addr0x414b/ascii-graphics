@@ -24,6 +24,7 @@ int main() {
 	smoothSkull.translate(3.5f, 0.0f, -5.f);
 
 	Cube cube;
+	cube.scale(2.f);
 	cube.translate(0.0f, -5.f, -7.f);
 
 	float deg = 0.1f;

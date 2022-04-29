@@ -1,4 +1,5 @@
 #include "Lights.hpp"
+#include "Mesh.hpp"
 
 
 /* Default Constructor - Create directional light

@@ -5,10 +5,10 @@
 #include <algorithm>
 #include <math.h>
 
-/* Default constructor
- * @param xx our x position
- * @param yy our y position
- * @param zz our z position */
+/* Default constructor - create a vertex with NO normal
+ * @param xx: x position
+ * @param yy: y position
+ * @param zz: z position */
 Vert::Vert(float xx, float yy, float zz) {
 	x = xx;
 	y = yy;
@@ -18,13 +18,13 @@ Vert::Vert(float xx, float yy, float zz) {
 	zn = 0.f;
 }
 
-/* Default constructor - create a vertex
- * @param xx our x position
- * @param yy our y position
- * @param zz our z position
- * @param nx our x normal location
- * @param ny our y normal location
- * @param nz our z normal location */
+/* Default constructor - create a vertex WITH a normal
+ * @param xx: x position
+ * @param yy: y position
+ * @param zz: z position
+ * @param nx: x normal location
+ * @param ny: y normal location
+ * @param nz: z normal location */
 Vert::Vert(float xx, float yy, float zz, float nx, float ny, float nz) {
 	x = xx;
 	y = yy;
@@ -35,7 +35,7 @@ Vert::Vert(float xx, float yy, float zz, float nx, float ny, float nz) {
 }
 
 /* Default constructor - create a vertex
- * Default values: x,y,z = 0 */
+ * Default values: x,y,z, xn,yn,zn = 0 */
 Vert::Vert() {
 	x = 0.0f;
 	y = 0.0f;
@@ -45,9 +45,9 @@ Vert::Vert() {
 	zn = 0.f;
 }
 
-/* Default constructor
- * @params p1,p2,p3 vertices of the triangle
- * @params x,y,z the face normal of the triangle */
+/* Default constructor - create a triangle
+ * @params p1,p2,p3: vertices of the triangle
+ * @params x,y,z: the face normal of the triangle */
 Trig::Trig(Vert p1, Vert p2, Vert p3, float x, float y, float z) {
 	verts[0] = p1;
 	verts[1] = p2;
@@ -66,8 +66,8 @@ Trig::Trig(Vert p1, Vert p2, Vert p3, float x, float y, float z) {
 }
 
 /* Default constructor - load an obj file mesh thats smoothed
- * @param s any random number, doesn't matter - doesn't do anything
- * @param objFile path to file */
+ * @param s: any random number, doesn't matter - doesn't do anything
+ * @param objFile: path to file */
 Mesh::Mesh(int s, std::string objFile) {
 
 	std::fstream file;
@@ -149,30 +149,20 @@ Mesh::Mesh(int s, std::string objFile) {
 			Vert cross((dir1.y*dir2.z)-(dir1.z*dir2.y),
 					(dir1.z*dir2.x)-(dir1.x*dir2.z), (dir1.x*dir2.y)-(dir1.y*dir2.x));
 
-			//float l = sqrtf(cross.x*cross.x + cross.y*cross.y + cross.z*cross.z);
-			//cross.x /= l;
-			//cross.y /= l;
-			//cross.z /= l;
+			float l = sqrtf(cross.x*cross.x + cross.y*cross.y + cross.z*cross.z);
+			cross.x /= l;
+			cross.y /= l;
+			cross.z /= l;
 
 			Trig t(v1, v2, v3, cross.x, cross.y, cross.z);
 
 			trigs.push_back(t);
-
-			//std::cout << t.verts[0].x << ", " << t.verts[0].y << ", " << t.verts[0].z << std::endl;
-
-			//std::cout << p1 << " " << p2 << " " << p3 << std::endl;
-			//std::cout << vertices[0] << std::endl;
-			//std::cout << v3.x << std::endl;
 		}
 	}
-
-	std::istringstream v(vertices[0]);
-	v >> x;
-	//std::cout << normals[0] << std::endl;
-
 }
 
-/* Default constructor - load an obj file mesh */
+/* Default constructor - load an obj file mesh (MUST BE FLAT SHADED)
+ * @param objFile: path to file */
 Mesh::Mesh(std::string objFile) {
 
 	std::fstream file;
@@ -239,19 +229,8 @@ Mesh::Mesh(std::string objFile) {
 			Trig t(v1, v2, v3, std::stof(x), std::stof(y), std::stof(z));
 
 			trigs.push_back(t);
-
-			//std::cout << t.verts[0].x << ", " << t.verts[0].y << ", " << t.verts[0].z << std::endl;
-
-			//std::cout << p1 << " " << p2 << " " << p3 << std::endl;
-			//std::cout << vertices[0] << std::endl;
-			//std::cout << v3.x << std::endl;
 		}
 	}
-
-	std::istringstream v(vertices[0]);
-	v >> x;
-	//std::cout << normals[0] << std::endl;
-
 }
 
 /* Default constructor - Set default translation/rotation amounts */
@@ -331,5 +310,4 @@ Cube::Cube() {
 	rotAmt.x = 0.0f;
 	rotAmt.y = 0.0f;
 	rotAmt.z = 0.0f;
-
 }
