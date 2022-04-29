@@ -2,8 +2,8 @@
 
 
 /* Default Constructor - Create directional light
- * @param x,y,z light location
- * @param xd,yd,zd light directional vector */
+ * @param x,y,z: light location
+ * @param xd,yd,zd: light directional vector */
 LightD::LightD(float x, float y, float z, float xd, float yd, float zd) {
 	Vert p(x, y, z);
 	position = p;

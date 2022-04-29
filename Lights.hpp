@@ -10,8 +10,8 @@ class LightD {
 		Vert direction; // Light direction vector
 
 		/* Default Constructor - Create directional light
-		 * @param x,y,z light location
-		 * @param xd,yd,zd light directional vector */
+		 * @param x,y,z: light location
+		 * @param xd,yd,zd: light directional vector */
 		LightD(float x, float y, float z, float xd, float yd, float zd);
 
 		/* Default Constructor - Create directional light
