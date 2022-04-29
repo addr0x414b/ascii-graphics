@@ -1,14 +1,13 @@
 #include "Screen.hpp"
-#include <cmath>
 #include <unistd.h>
 #include <math.h>
 #include <algorithm>
 
 /* Default constructor
- * @param w the screen width
- * @param h the screen height
- * @param c our screens camera
- * @param l our scenes light */
+ * @param w: screen width
+ * @param h: screen height
+ * @param c: screens camera
+ * @param l: scenes light */
 Screen::Screen(int w, int h, Camera& c, LightD l) {
 	camera = c;
 	width = w;
@@ -21,10 +20,10 @@ Screen::Screen(int w, int h, Camera& c, LightD l) {
 	zBuffer.resize(height, std::vector<float>(width, 100000.f));
 	lastTime = std::chrono::steady_clock::now();
 	currTime = std::chrono::steady_clock::now();
-	renderMode = 1;
+	renderMode = 1; // Use z buffering by default
 }
 
-// Calculate deltaTime and FPS
+// Calculate deltaTime
 void Screen::start() {
 		lastTime = currTime;
 		currTime = std::chrono::steady_clock::now();
@@ -41,13 +40,14 @@ void Screen::print() {
 		}
 		std::cout << "\n";
 	}
+	// Sleep values slow the program down so it is less jittery
 	//usleep(8500);
 	//usleep(9000);
 	usleep(11000);
 	//usleep(15000);
 }
 
-// Clear the contents of the screen buffer
+// Clear the contents of the screen buffer and z buffer
 void Screen::clear() {
 	buffer.clear();
 	buffer.resize(height, std::vector<char>(width, fillChar));
@@ -56,22 +56,26 @@ void Screen::clear() {
 }
 
 /* Draw to the buffer at a specific point. Does bounds checking
- * @param x our x position
- * @param y our y position
- * @param c the character we draw to the buffer */
+ * @param x: x position
+ * @param y: y position
+ * @param c: character to draw to the buffer */
 void Screen::drawToBuffer(float x, float y, char c) {
 	if (x < width && y < height && x >= 0 && y >= 0) {
 		x = round(x);
 		y = round(y);
-		if (renderMode == 0) { // Z buffer disabled
+		if (renderMode == 0) { // Z buffer disabled, simply draw
 			buffer[y][x] = c;
 		} else if (renderMode == 1) {
-			float z = calcZ(x, y, zCross, zVert);
-			if(checkZB(x, y, z)) {
-				zBuffer[y][x] = z;
-				if (c == 'S') { // If we are smooth shading
+			float z = calcZ(x, y, zCross, zVert); // Calculate the z value
+			if(checkZB(x, y, z)) { // Check if z is < than current z buffer value
+				zBuffer[y][x] = z; // Replace with new z value
+				if (c == 'S') { // If smooth shading
+					// All that's happening is calculating the shade of the pixel
 					float w1, w2, w3;
 					calcBary(tP1, tP2, tP3, x, y, w1, w2, w3);
+
+					/* Use barycentric coords to calculate the weights between the normals
+					 * of the triangle */
 					float xx = ((w1 * p1N.x) + (w2 * p2N.x) + (w3 * p3N.x));
 					float yy = ((w1 * p1N.y) + (w2 * p2N.y) + (w3 * p3N.y));
 					float zz = ((w1 * p1N.z) + (w2 * p2N.z) + (w3 * p3N.z));
@@ -79,7 +83,7 @@ void Screen::drawToBuffer(float x, float y, char c) {
 					xx /= l;
 					yy /= l;
 					zz /= l;
-					Vert pNormal(xx, yy, zz);
+					Vert pNormal(xx, yy, zz); // The normal vector of the pixel
 
 					float shade = round((abs(dot(pNormal, light.direction)) * 8)) - 1;
 					if (shade <= 0) {
@@ -96,19 +100,19 @@ void Screen::drawToBuffer(float x, float y, char c) {
 }
 
 /* Check the Z Buffer at a specific location
- * @params x,y the x and y coordinate in z buffer
- * @param z the z we want to check with
- * @return if the z we check with is > than z in z buffer */
+ * @params x,y: the x and y coordinate in z buffer
+ * @param z: z we want to check with
+ * @return bool: if the z we check with is < than z in z buffer */
 bool Screen::checkZB(float x, float y, float z) {
 	return z < zBuffer[y][x];
 }
 
 /* Draw a line to the buffer using individual coordinates
- * @param x1 the x position of point 1
- * @param y1 the y position of point 1
- * @param x2 the x position of point 2
- * @param y2 the y position of point 2
- * @param c the character we draw to the buffer */
+ * @param x1: x position of point 1
+ * @param y1: y position of point 1
+ * @param x2: x position of point 2
+ * @param y2: y position of point 2
+ * @param c: character to draw to the buffer */
 void Screen::drawLine(float x1, float y1, float x2, float y2, char c) {
 	x1 = round(x1);
 	y1 = round(y1);
@@ -144,17 +148,18 @@ void Screen::drawLine(float x1, float y1, float x2, float y2, char c) {
 		}
 	}
 }
+
 /* Draw a line to the buffer using verts
- * @param a our first vertex
- * @param b our second vertex
- * @param c the character we draw to the buffer */
+ * @param a: first vertex
+ * @param b: second vertex
+ * @param c: character to draw to the buffer */
 void Screen::drawLine(Vert a, Vert b, char c) {
 	drawLine(a.x, a.y, b.x, b.y, c);
 }
 
 /* Draw a triangle to the buffer
- * @param t our triangle to draw
- * @param c the character we draw to the buffer */
+ * @param t: triangle to draw
+ * @param c: character to draw to the buffer */
 void Screen::drawTrig(Trig t, char c) {
 	drawLine(t.verts[0], t.verts[1], c);
 	drawLine(t.verts[1], t.verts[2], c);
@@ -162,15 +167,18 @@ void Screen::drawTrig(Trig t, char c) {
 }
 
 /* Draw all of the triangles in a mesh to the buffer
- * @param m our mesh
- * @param c our draw character */
+ * @param m: mesh
+ * @param c: draw character */
 void Screen::drawMesh(Mesh m, char c) {
 	for (auto &trig : m.trigs) {
+		// Check if the triangle is visible to the camera via its normal
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 
 			project(trig, camera.projMat);
 
 			centerFlipY(trig);
+
+			// Get zCross and zVert, which is used for z buffer calculations
 			Vert v1 = direc(trig.verts[1], trig.verts[0]);
 			Vert v2 = direc(trig.verts[2], trig.verts[0]);
 			zCross = cross(v1, v2);
@@ -181,36 +189,44 @@ void Screen::drawMesh(Mesh m, char c) {
 	}
 }
 
-/* Draw all of the triangles not considering normals
- * @param m the mesh
- * @param c the draw character */
+/* Draw all of the triangles in wireframe. DOESN'T consider normals
+ * @param m: mesh
+ * @param c: draw character */
 void Screen::drawMeshWire(Mesh m, char c) {
 	for (auto &trig : m.trigs) {
 		project(trig, camera.projMat);
 
 		centerFlipY(trig);
+
+		// Get zCross and zVert, which is used for z buffer calculations
 		Vert v1 = direc(trig.verts[1], trig.verts[0]);
 		Vert v2 = direc(trig.verts[2], trig.verts[0]);
 		zCross = cross(v1, v2);
 		zVert = trig.verts[0];
+
 		drawTrig(trig, c);
 	}
 }
 
 /* Fill in a mesh via a character
- * @param m the mesh
- * @param c the draw character */
+ * @param m: mesh
+ * @param c: draw character */
 void Screen::fillMesh(Mesh m, char c) {
 	for (auto &trig : m.trigs) {
+		// Check if triangle is visible to camera via its normal
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 			project(trig, camera.projMat);
 
 			centerFlipY(trig);
+
+			// Get zCross and zVert, which is used for z buffer calculations
 			Vert v1 = direc(trig.verts[1], trig.verts[0]);
 			Vert v2 = direc(trig.verts[2], trig.verts[0]);
 			zCross = cross(v1, v2);
 			zVert = trig.verts[0];
 
+			// Triangles must be sorted basted on y value. This allows to determine
+			// is it's a flat bottom, flat top, or to split it via the middle point
 			std::sort(trig.verts, trig.verts + 3,
 					[](Vert const& a, Vert const& b) -> bool {
 					return a.y < b.y;
@@ -221,6 +237,7 @@ void Screen::fillMesh(Mesh m, char c) {
 			} else if (trig.verts[0].y == trig.verts[1].y) {
 				fillFt(trig, c);
 			} else {
+				// Not flat bottom or top, thus split the triangle in half via mid point
 				float m1 = (trig.verts[0].y - trig.verts[2].y) /
 					(trig.verts[0].x - trig.verts[2].x);
 
@@ -237,8 +254,8 @@ void Screen::fillMesh(Mesh m, char c) {
 }
 
 /* Fill a flat bottom triangle
- * @param t the triangle
- * @param c the draw character */
+ * @param t: triangle
+ * @param c: draw character */
 void Screen::fillFb(Trig t, char c) {
 
 	float m1 = (t.verts[0].y - t.verts[1].y) / (t.verts[0].x - t.verts[1].x);
@@ -253,7 +270,7 @@ void Screen::fillFb(Trig t, char c) {
 	float x2;
 
 	for (int y = t.verts[0].y+1; y <= t.verts[2].y; y++) {
-		if (std::isfinite(m1)) {
+		if (std::isfinite(m1)) { // If divide by 0 (vertical line)
 			x1 = (y - b1) / m1;
 		} else {
 			x1 = t.verts[0].x;
@@ -269,8 +286,8 @@ void Screen::fillFb(Trig t, char c) {
 }
 
 /* Fill a flat top triangle
- * @param t the triangle
- * @param c the draw character */
+ * @param t: triangle
+ * @param c: draw character */
 void Screen::fillFt(Trig t, char c) {
 	float m1 = (t.verts[2].y - t.verts[0].y) / (t.verts[2].x - t.verts[0].x);
 	float b1 = t.verts[2].y - (m1 * t.verts[2].x);
@@ -283,7 +300,7 @@ void Screen::fillFt(Trig t, char c) {
 	float x1;
 	float x2;
 	for (int y = t.verts[2].y; y >= t.verts[0].y; y--) {
-		if (std::isfinite(m1)) {
+		if (std::isfinite(m1)) { // If divide by 0 (vertical line)
 			x1 = (y - b1) / m1;
 		} else {
 			x1 = t.verts[2].x;
@@ -298,31 +315,34 @@ void Screen::fillFt(Trig t, char c) {
 	}
 }
 
-/* Shade in the mesh based on the light
- * @param m the mesh */
+/* Shade in the mesh based on the light direction. FLAT SHADED!
+ * @param m: mesh */
 void Screen::shadeMesh(Mesh m) {
 	for (auto &trig : m.trigs) {
+		// Check if the triangle is visible via its normal vector
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 
 			project(trig, camera.projMat);
 
 			centerFlipY(trig);
 
+			// zCross and zVert used for z buffer calculations
 			Vert v1 = direc(trig.verts[1], trig.verts[0]);
 			Vert v2 = direc(trig.verts[2], trig.verts[0]);
 			zCross = cross(v1, v2);
 			zVert = trig.verts[0];
 
+			// Calculate the shade character based on the light direction
 			float shade = round((abs(dot(trig.fNormal, light.direction)) * 8)) - 1;
-
 			if (shade <= 0) {
 				shade = 0;
 			} else if(shade > 8) {
 				shade = 7;
 			}
-
 			char c = shadeValues[shade];
 
+			// Triangles must be sorted basted on y value. This allows to determine
+			// is it's a flat bottom, flat top, or to split it via the middle point
 			std::sort(trig.verts, trig.verts + 3,
 					[](Vert const& a, Vert const& b) -> bool {
 					return a.y < b.y;
@@ -349,24 +369,25 @@ void Screen::shadeMesh(Mesh m) {
 	}
 }
 
-/* Shade in the mesh smooth based on the light
- * @param m the mesh */
+/* Shade in the mesh smooth based on the light direction
+ * @param m: SMOOTHED mesh */
 void Screen::shadeMeshSmooth(Mesh m) {
 	for (auto &trig : m.trigs) {
+		// Check if the triangle is visible via its normal vector
 		if (dot(trig.fNormal, direc(trig.verts[0], camera.pos)) < 0.0f) {
 
 			project(trig, camera.projMat);
 
 			centerFlipY(trig);
 
+			// zCross and zVert used for z buffer calculations
 			Vert v1 = direc(trig.verts[1], trig.verts[0]);
 			Vert v2 = direc(trig.verts[2], trig.verts[0]);
 			zCross = cross(v1, v2);
 			zVert = trig.verts[0];
 
-			//Vert p1(trig.verts[0].xn, trig.verts[0].yn, trig.verts[0].zn);
-			//Vert p2(trig.verts[1].xn, trig.verts[1].yn, trig.verts[1].zn);
-			//Vert p3(trig.verts[2].xn, trig.verts[2].yn, trig.verts[2].zn);
+			// Store the triangle vertice normals and positions, this is used to
+			// interpolate for each pixel and get the normals for each pixel
 			p1N = trig.norms[0];
 			p2N = trig.norms[1];
 			p3N = trig.norms[2];
@@ -374,11 +395,15 @@ void Screen::shadeMeshSmooth(Mesh m) {
 			tP2 = trig.verts[1];
 			tP3 = trig.verts[2];
 
+			// Triangles must be sorted basted on y value. This allows to determine
+			// is it's a flat bottom, flat top, or to split it via the middle point
 			std::sort(trig.verts, trig.verts + 3,
 					[](Vert const& a, Vert const& b) -> bool {
 					return a.y < b.y;
 					});
 
+			// The draw character is set as 'S' to tell the draw functions it will
+			// be a smooth shaded object
 			if (trig.verts[1].y == trig.verts[2].y) {
 				fillFb(trig, 'S');
 			} else if (trig.verts[0].y == trig.verts[1].y) {
@@ -400,26 +425,26 @@ void Screen::shadeMeshSmooth(Mesh m) {
 	}
 }
 
-/* Bring the triangle to the center of the screen. This makes the global
- * coord of (0,0,0) in the center of the screen. Also flip the y coordinates
- * to make the +y direction go up instead of down
- * @param t the triangle */
+/* Center the triangles to the middle of the screen, flip the triangles so
+ * +y is up, and scale the x based on aspect ratio
+ * @param t: triangle */
 void Screen::centerFlipY(Trig& t) {
 
+	// Flip triangle verts
 	t.verts[0].y *= -1.f;
 	t.verts[1].y *= -1.f;
 	t.verts[2].y *= -1.f;
 
+	// Scale by aspect ratio
 	t.verts[0].x *= camera.a*2.5;
 	t.verts[1].x *= camera.a*2.5;
 	t.verts[2].x *= camera.a*2.5f;
 
+	// Move the very center of screen
 	t.verts[0].x += (float)width/2;
 	t.verts[0].y += (float)height/2.f;
 	t.verts[1].x += (float)width/2;
 	t.verts[1].y += (float)height/2.f;
 	t.verts[2].x += (float)width/2;
 	t.verts[2].y += (float)height/2.f;
-
-
 }
