@@ -13,8 +13,8 @@ float gAspect = (float)gScreenWidth / (float)gScreenHeight;
 
 int main() {
 
-	Camera camera(0.0f, 0.0f, 0.0f, gAspect, 30.f, 0.1f, 1000.f);
-	LightD light(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.f);
+	Camera camera(0.0f, 0.0f, 0.0f, gAspect);
+	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
 	Mesh smoothMonkey(1, "monkey-smooth.obj");

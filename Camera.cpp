@@ -1,19 +1,21 @@
 #include "Camera.hpp"
 
 /* Default constructor
- * @params x,y,z position of our camera
- * @param aspect the screen aspect ratio
- * @param fov the field of view
- * @param zNear the z near clipping
- * @param zFar the z far clipping */
+ * @params x,y,z: position of our camera
+ * @param aspect: the screen aspect ratio
+ * @param fov: the field of view
+ * @param zNear: the z near clipping
+ * @param zFar: the z far clipping */
 Camera::Camera(float x, float y, float z, float aspect,
 		float fov, float zNear, float zFar) {
-	pos.x = x;
+	pos.x = x; // Set camera position
 	pos.y = y;
 	pos.z = z;
 
+	/* Create the projection matrix based on the inputted values */
 	projMat = perspective(aspect, fov, zNear, zFar);
 
+	/* Assign the camera values */
 	a = aspect;
 	f = fov;
 	zN = zNear;
@@ -21,10 +23,10 @@ Camera::Camera(float x, float y, float z, float aspect,
 
 }
 
-/* Default constructor, uses default values for projection
- * @params x,y,z position of our camera
- * @param aspect the screen aspect ratio
- * Default value: fov = 20.0f
+/* Default constructor - uses default values for projection
+ * @params x,y,z: position of our camera
+ * @param aspect: the screen aspect ratio
+ * Default value: fov = 30.0f
  * Default value: zNear = 0.1f
  * Default value: zFar = 1000.f */
 Camera::Camera(float x, float y, float z, float aspect) {
@@ -32,10 +34,10 @@ Camera::Camera(float x, float y, float z, float aspect) {
 	pos.y = y;
 	pos.z = z;
 
-	projMat = perspective(aspect, 20.f, 0.1f, 1000.f);
+	projMat = perspective(aspect, 30.f, 0.1f, 1000.f);
 
 	a = aspect;
-	f = 20.f;
+	f = 30.f;
 	zN = 0.1f;
 	zF = 1000.f;
 }
