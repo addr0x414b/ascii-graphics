@@ -14,7 +14,7 @@ float gAspect = (float)gScreenWidth / (float)gScreenHeight;
 int main() {
 
 	Camera camera(0.0f, 0.0f, 0.0f, gAspect, 30.f, 0.1f, 1000.f);
-	LightD light(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.f);
+	LightD light(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.f);
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
 	Mesh smoothMonkey(1, "monkey-smooth.obj");
@@ -33,7 +33,7 @@ int main() {
 		smoothMonkey.rotate(deg*0.5f, deg, 0.f);
 		smoothSkull.rotate(0.f, deg, 0.f);
 		cube.rotate(deg, deg*2.f, 0.f);
-		deg += 1.f * screen.deltaTime;
+		deg += 25.f * screen.deltaTime;
 
 		screen.shadeMeshSmooth(smoothMonkey);
 		screen.shadeMeshSmooth(smoothSkull);

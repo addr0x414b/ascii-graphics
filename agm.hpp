@@ -5,26 +5,27 @@
 
 /* Ascii Graphics Mathematics library */
 
-// 4x4 matrix
+/* 4x4 matrix of float values. Uses std vector */
 class Mat4 {
 	public:
-		//float m[4][4] = { 0.0f };
 		std::vector<std::vector<float>> m;
+
+		/* Default constructor - Create 4x4 matrix with 0.0f */
 		Mat4();
 };
 
 
 /* Creates a Mat4 with the perspective projection matrix values applied
- * @param aspect our screen aspect ratio
- * @param fov our field of view
- * @param zNear our near clipping plane
- * @param zFar our far clipping plane
- * @return Mat4 matrix with projection values */
+ * @param aspect: the screen aspect ratio
+ * @param fov: the field of view
+ * @param zNear: the near clipping plane
+ * @param zFar: the far clipping plane
+ * @return Mat4: matrix with projection values */
 Mat4 perspective(float aspect, float fov, float zNear, float zFar);
 
 /* Creates a Mat4 with the rotation matrix along the Z axis
- * @param degrees the number of degrees to rotate
- * @return Mat4 rotation matrix */
+ * @param degrees: the number of degrees to rotate
+ * @return Mat4: rotation matrix */
 Mat4 rotZ(float degrees);
 
 /* Creates a Mat4 with the rotation matrix along the Y axis

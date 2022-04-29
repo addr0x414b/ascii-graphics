@@ -7,11 +7,11 @@ Mat4::Mat4() {
 }
 
 /* Creates a Mat4 with the perspective projection matrix values applied
- * @param aspect our screen aspect ratio
- * @param fov our field of view
- * @param zNear our near clipping plane
- * @param zFar our far clipping plane
- * @return Mat4 matrix with projection values */
+ * @param aspect: the screen aspect ratio
+ * @param fov: the field of view
+ * @param zNear: the near clipping plane
+ * @param zFar: the far clipping plane
+ * @return Mat4: matrix with projection values */
 Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 	Mat4 m;
 
@@ -39,6 +39,8 @@ Mat4 perspective(float aspect, float fov, float zNear, float zFar) {
 Mat4 rotX(float degrees) {
 	Mat4 m;
 
+	degrees = (degrees) * (3.141592f / 180.f);
+
 	m.m[0][0] = 1.0f;
 	m.m[1][1] = cosf(degrees);
 	m.m[1][2] = -sinf(degrees);
@@ -55,6 +57,8 @@ Mat4 rotX(float degrees) {
 Mat4 rotY(float degrees) {
 	Mat4 m;
 
+	degrees = (degrees) * (3.141592f / 180.f);
+
 	m.m[0][0] = cosf(degrees);
 	m.m[0][2] = sinf(degrees);
 	m.m[1][1] = 1.0f;
@@ -70,6 +74,8 @@ Mat4 rotY(float degrees) {
  * @return Mat4 rotation matrix */
 Mat4 rotZ(float degrees) {
 	Mat4 m;
+
+	degrees = (degrees) * (3.141592f / 180.f);
 
 	m.m[0][0] = cosf(degrees);
 	m.m[0][1] = -sinf(degrees);
