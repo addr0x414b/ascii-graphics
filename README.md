@@ -8,7 +8,7 @@
   <h3 align="center">ASCII Graphics</h3>
 
   <p align="center">
-    3D graphics library that runs in a Linux terminal
+    C++ 3D graphics library that runs in a Linux terminal
   </p>
 </div>
 
