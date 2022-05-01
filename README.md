@@ -157,32 +157,32 @@ while (1) { // Screen loop
 
 ### Different Display Methods
 
-1. Display a smooth shaded mesh
+* Display a smooth shaded mesh
 ```c++
 screen.shadeMeshSmooth(meshName);
 ```
 
-2. Display a flat shaded mesh
+* Display a flat shaded mesh
 ```c++
 screen.shadeMesh(meshName);
 ```
 
-3. Fill entire mesh with a single character, no shading
+* Fill entire mesh with a single character, no shading
 ```c++
 screen.fillMesh(meshName, '*'); // Pick character here
 ```
 
-4. Show mesh triangles
+* Show mesh triangles
 ```c++
 screen.drawMesh(meshName, '*'); // Pick character here
 ```
 
-5. Display wireframe of mesh
+* Display wireframe of mesh
 ```c++
 screen.drawMeshWire(meshName, '*'); // Pick character here
 ```
 
-6. Can combine different methods
+* Can combine different methods
 ```c++
 // Results in an outlined cube
 screen.drawMesh(cube, '#'); // Draw the triangles of the cube
