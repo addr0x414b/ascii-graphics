@@ -1,0 +1,10 @@
+/home/alex/Fun/ascii-graphics/build/CMakeFiles/Ascii-Graphics.dir
+/home/alex/Fun/ascii-graphics/build/CMakeFiles/edit_cache.dir
+/home/alex/Fun/ascii-graphics/build/CMakeFiles/rebuild_cache.dir
+/home/alex/Fun/ascii-graphics/build/src/CMakeFiles/agm.dir
+/home/alex/Fun/ascii-graphics/build/src/CMakeFiles/Camera.dir
+/home/alex/Fun/ascii-graphics/build/src/CMakeFiles/Lights.dir
+/home/alex/Fun/ascii-graphics/build/src/CMakeFiles/Mesh.dir
+/home/alex/Fun/ascii-graphics/build/src/CMakeFiles/Screen.dir
+/home/alex/Fun/ascii-graphics/build/src/CMakeFiles/edit_cache.dir
+/home/alex/Fun/ascii-graphics/build/src/CMakeFiles/rebuild_cache.dir

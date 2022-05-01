@@ -1,0 +1,5 @@
+add_library(agm agm.cpp)
+add_library(Camera Camera.cpp)
+add_library(Lights Lights.cpp)
+add_library(Mesh Mesh.cpp)
+add_library(Screen Screen.cpp)

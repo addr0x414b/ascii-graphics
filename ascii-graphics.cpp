@@ -1,10 +1,10 @@
-#include "Screen.hpp"
-#include "agm.hpp"
-#include "Camera.hpp"
 #include <iostream>
 #include <algorithm>
-#include "Lights.hpp"
-#include "Mesh.hpp"
+#include "src/Screen.hpp"
+#include "src/agm.hpp"
+#include "src/Camera.hpp"
+#include "src/Lights.hpp"
+#include "src/Mesh.hpp"
 
 // Global variables
 int gScreenWidth = 220*2.1f;
@@ -17,11 +17,11 @@ int main() {
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
-	Mesh smoothMonkey(1, "monkey-smooth.obj");
+	Mesh smoothMonkey(1, "../monkey-smooth.obj");
 	smoothMonkey.translate(-1.5f, 0.0f, -2.f);
 
-	Mesh smoothSkull(1, "skull-smooth.obj");
-	smoothSkull.translate(3.5f, 0.0f, -5.f);
+	//Mesh smoothSkull(1, "../skull-smooth.obj");
+	//smoothSkull.translate(3.5f, 0.0f, -5.f);
 
 	Cube cube;
 	cube.scale(2.f);
@@ -32,12 +32,12 @@ int main() {
 		screen.start();
 
 		smoothMonkey.rotate(deg*0.5f, deg, 0.f);
-		smoothSkull.rotate(0.f, deg, 0.f);
+		//smoothSkull.rotate(0.f, deg, 0.f);
 		cube.rotate(deg, deg*2.f, 0.f);
 		deg += 25.f * screen.deltaTime;
 
 		screen.shadeMeshSmooth(smoothMonkey);
-		screen.shadeMeshSmooth(smoothSkull);
+		//screen.shadeMeshSmooth(smoothSkull);
 		screen.shadeMesh(cube);
 
 		screen.print();

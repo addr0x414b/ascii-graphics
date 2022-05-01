@@ -1,0 +1,2 @@
+/usr/bin/ar qc libagm.a CMakeFiles/agm.dir/agm.cpp.o
+/usr/bin/ranlib libagm.a
