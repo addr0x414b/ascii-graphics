@@ -29,7 +29,7 @@ int main() {
 		cube.rotate(0.0f, deg, deg); // Rotate our cube
 		deg += 50 * screen.deltaTime; // Increase the degrees of rotation
 
-		screen.drawMeshWire(cube, '#');
+		screen.shadeMesh(cube);
 
 		screen.print(); // Print the entire screen
 		screen.clear(); // Clear the screen
