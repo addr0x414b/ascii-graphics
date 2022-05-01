@@ -60,7 +60,7 @@ class Mesh {
 		 * @param objFile: path to file */
 		Mesh(std::string objFile);
 
-		/* Default constructor - load an obj file mesh thats smoothed
+		/* Default constructor - load an obj file mesh that's smoothed
 		 * @param s: any random number, doesn't matter - doesn't do anything
 		 * @param objFile: path to file */
 		Mesh(int s, std::string objFile);

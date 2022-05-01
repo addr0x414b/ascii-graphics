@@ -106,7 +106,12 @@ void Screen::drawToBuffer(float x, float y, char c) {
  * @param z: z we want to check with
  * @return bool: if the z we check with is < than z in z buffer */
 bool Screen::checkZB(float x, float y, float z) {
-	return z < zBuffer[y][x];
+	if (round(abs(zBuffer[y][x] - z)) == 0) {
+		return false;
+	} else {
+		return z < zBuffer[y][x];
+	}
+	//return z < zBuffer[y][x];
 }
 
 /* Draw a line to the buffer using individual coordinates
