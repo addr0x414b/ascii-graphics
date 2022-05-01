@@ -43,7 +43,7 @@ void Screen::print() {
 	// Sleep values slow the program down so it is less jittery
 	//usleep(8500);
 	//usleep(9000);
-	usleep(11000);
+	usleep(12000);
 	//usleep(15000);
 }
 

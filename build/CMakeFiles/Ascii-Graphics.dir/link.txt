@@ -1,1 +1,1 @@
-/usr/bin/c++ "CMakeFiles/Ascii-Graphics.dir/ascii-graphics.cpp.o" -o Ascii-Graphics  src/libagm.a src/libCamera.a src/libLights.a src/libMesh.a src/libScreen.a 
+/usr/bin/c++ "CMakeFiles/Ascii-Graphics.dir/ascii-graphics.cpp.o" -o Ascii-Graphics  -Wl,-rpath,/home/alex/Fun/ascii-graphics/build/src src/libagm.so src/libCamera.so src/libLights.so src/libMesh.so src/libScreen.so 

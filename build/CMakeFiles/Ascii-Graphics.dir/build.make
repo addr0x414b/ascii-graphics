@@ -92,11 +92,11 @@ Ascii__Graphics_EXTERNAL_OBJECTS =
 
 Ascii-Graphics: CMakeFiles/Ascii-Graphics.dir/ascii-graphics.cpp.o
 Ascii-Graphics: CMakeFiles/Ascii-Graphics.dir/build.make
-Ascii-Graphics: src/libagm.a
-Ascii-Graphics: src/libCamera.a
-Ascii-Graphics: src/libLights.a
-Ascii-Graphics: src/libMesh.a
-Ascii-Graphics: src/libScreen.a
+Ascii-Graphics: src/libagm.so
+Ascii-Graphics: src/libCamera.so
+Ascii-Graphics: src/libLights.so
+Ascii-Graphics: src/libMesh.so
+Ascii-Graphics: src/libScreen.so
 Ascii-Graphics: CMakeFiles/Ascii-Graphics.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/alex/Fun/ascii-graphics/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable Ascii-Graphics"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Ascii-Graphics.dir/link.txt --verbose=$(VERBOSE)

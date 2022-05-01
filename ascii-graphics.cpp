@@ -17,27 +17,17 @@ int main() {
 	LightD light;
 	Screen screen(gScreenWidth, gScreenHeight, camera, light);
 
-	Mesh smoothMonkey(1, "../monkey-smooth.obj");
-	smoothMonkey.translate(-1.5f, 0.0f, -2.f);
-
-	//Mesh smoothSkull(1, "../skull-smooth.obj");
-	//smoothSkull.translate(3.5f, 0.0f, -5.f);
-
 	Cube cube;
-	cube.scale(2.f);
-	cube.translate(0.0f, -5.f, -7.f);
+	cube.translate(0.0f, 0.0f, -2.5f);
+
 
 	float deg = 0.1f;
 	while (1) {
 		screen.start();
 
-		smoothMonkey.rotate(deg*0.5f, deg, 0.f);
-		//smoothSkull.rotate(0.f, deg, 0.f);
-		cube.rotate(deg, deg*2.f, 0.f);
-		deg += 25.f * screen.deltaTime;
+		cube.rotate(deg, deg, 0.0f);
+		deg += 30 * screen.deltaTime;
 
-		screen.shadeMeshSmooth(smoothMonkey);
-		//screen.shadeMeshSmooth(smoothSkull);
 		screen.shadeMesh(cube);
 
 		screen.print();

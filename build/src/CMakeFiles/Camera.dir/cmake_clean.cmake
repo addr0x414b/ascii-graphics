@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Camera.dir/Camera.cpp.o"
   "CMakeFiles/Camera.dir/Camera.cpp.o.d"
-  "libCamera.a"
   "libCamera.pdb"
+  "libCamera.so"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/agm.dir/agm.cpp.o"
   "CMakeFiles/agm.dir/agm.cpp.o.d"
-  "libagm.a"
   "libagm.pdb"
+  "libagm.so"
 )
 
 # Per-language clean rules from dependency scanning.

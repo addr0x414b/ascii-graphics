@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Lights.dir/Lights.cpp.o"
   "CMakeFiles/Lights.dir/Lights.cpp.o.d"
-  "libLights.a"
   "libLights.pdb"
+  "libLights.so"
 )
 
 # Per-language clean rules from dependency scanning.
