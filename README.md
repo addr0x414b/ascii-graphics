@@ -22,120 +22,191 @@ Ascii-graphics is a basic 3D graphics library designed to run in a linux termina
 <!-- GETTING STARTED -->
 ## Features
 
-Below shows the key features of the ascii-graphics library.
+Below shows some key features of the ascii-graphics library.
 
 ### Custom OBJ Model Loading
 
 <img src="https://i.postimg.cc/GtNvxSQy/cat.gif" width=800>
 
-### Smooth and Flat Lighting
+### Smooth Lighting
 
-<img src="https://i.postimg.cc/g0r9jgJZ/monkey-smooth-flat.gif" width="800">
+<img src="https://i.postimg.cc/4NcGGL02/smooth-sphere.png" width=400>
 
-### Installation
+### Z Buffering
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+<img src="https://i.postimg.cc/k4fTkbKv/zbuffer.gif" width=800>
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+### Other Features
+* Outline meshes
+* Wireframe mode
+* Fill entire mesh with single character
+* Basic lighting
+
+## Installation
+
+1. Clone the repo
    ```
-3. Install NPM packages
-   ```sh
-   npm install
+   git clone https://github.com/addr0x414b/ascii-graphics.git
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+2. In the cloned folder, create a build directory and cd to it
    ```
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
+   mkdir build && cd build
+   ```
+3. Run cmake
+   ```
+   cmake ../
+   ```
+4. Run make
+   ```
+   make
+   ```
+5. Run the program
+   ```
+   ./Ascii-Graphics
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Below is the default code the repo comes with:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+```c++
+//ascii-graphics.cpp
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+int gScreenWidth = 200; // Define the screens width and height
+int gScreenHeight = 50;
+float gAspect = (float)gScreenWidth / (float)gScreenHeight;
 
+int main() {
 
+	Camera camera(0.0f, 0.0f, 0.0f, gAspect); // Define the scenes camera
+	LightD light; // Define the scenes light
+	Screen screen(gScreenWidth, gScreenHeight, camera, light); // Define the screen of the scene
 
-<!-- ROADMAP -->
-## Roadmap
+	Cube cube; // Library comes with one default mesh
+	cube.translate(0.0f, 0.0f, -4.f); // Must translate the mesh away from the camera (-z is into the screen)
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+	float deg = 0.1f;
+	while (1) { // Screen loop
+		screen.start(); // Begin calculating the delta time per frame
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+		cube.rotate(0.0f, deg, deg); // Rotate cube
+		deg += 50 * screen.deltaTime; // Increase the degrees of rotation
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+		screen.shadeMesh(cube); // Print the cube into the buffer
 
+		screen.print(); // Print the buffer
+		screen.clear(); // Clear the screen
+	}
 
+	return 0;
+}
+```
 
-<!-- CONTRIBUTING -->
-## Contributing
+### Create Scene
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+1. Define size of the screen
+```c++
+int gScreenWidth = 200; // Width and height should be no larger than terminal
+int gScreenHeight = 50; // Can increase size with decreased terminal font size
+float gAspect = (float)gScreenWidth / (float)gScreenHeight;
+```
+2. Define camera, light, and screen
+```c++
+Camera camera(0.0f, 0.0f, 0.0f, gAspect); // Constructor uses default projection values
+LightD light; // Define the scenes light
+Screen screen(gScreenWidth, gScreenHeight, camera, light); // Define the screen
+```
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+### To Load a Custom Mesh
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Mesh MUST be in OBJ format
+2. Mesh MUST be triangulated, with normals
+3. OBJ file should be in the same directory as the ascii-graphics.cpp file
+4. File path MUST have "../" in front (assuming file is in the same directory as ascii-graphics.cpp)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+* Flat Shaded Mesh:
+```c++
+Mesh meshName("../path_to_flat_mesh.obj"); // Load a FLAT SHADED mesh
+meshName.translate(0.0f, 0.0f, -4.0f); // Translate the mesh away from the camera
+```
 
+* Smooth Shaded Mesh:
+```c++
+Mesh meshName(1, "../path_to_smooth_mesh.obj") // Load a SMOOTH SHADED mesh
+meshName.translate(0.0f, 0.0f, -4.0f); // Translate the mesh away from the camera
+```
 
+### Display the Graphics
+
+```c++
+float deg = 0.1f;
+while (1) { // Screen loop
+	screen.start(); // Begin calculating the delta time per frame
+
+	cube.rotate(0.0f, deg, deg); // Rotate cube
+	deg += 50 * screen.deltaTime; // Increase the degrees of rotation
+
+	screen.shadeMesh(cube); // Print the cube into the buffer
+
+	screen.print(); // Print the buffer
+	screen.clear(); // Clear the screen
+}
+
+```
+
+### Different Display Methods
+
+1. Display a smooth shaded mesh
+```c++
+screen.shadeMeshSmooth(meshName);
+```
+
+2. Display a flat shaded mesh
+```c++
+screen.shadeMesh(meshName);
+```
+
+3. Fill entire mesh with a single character, no shading
+```c++
+screen.fillMesh(meshName, '*'); // Pick character here
+```
+
+4. Show mesh triangles
+```c++
+screen.drawMesh(meshName, '*'); // Pick character here
+```
+
+5. Display wireframe of mesh
+```c++
+screen.drawMeshWire(meshName, '*'); // Pick character here
+```
+
+6. Can combine different methods
+```c++
+// Results in an outlined cube
+screen.drawMesh(cube, '#'); // Draw the triangles of the cube
+screen.fillMesh(cube, '*'); // Fill in the cube
+```
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
+YouTube: Coming Soon
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+Thanks to the following for allowing use of their 3D models:
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
+* [Man model by printable_models](https://free3d.com/3d-model/male-base-mesh-6682.html)
+* [Rocket model by Paul Chen uploaded by nixor](https://free3d.com/3d-model/rocket-ship-v1--579030.html)
+* [Cat model by snippysnappets](https://free3d.com/3d-model/low-poly-cat-46138.html)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
