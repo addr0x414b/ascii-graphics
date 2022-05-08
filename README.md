@@ -3,7 +3,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="https://i.postimg.cc/X757pjH4/rocket-man-cube.gif" alt="Logo" width="800">
+  <img src="https://i.postimg.cc/fLWJ9G35/rocket-man-cube.gif" alt="Logo" width="800">
 
   <h3 align="center">ASCII Graphics</h3>
 
